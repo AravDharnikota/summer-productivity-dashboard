@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Lock-In Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0a0a12;
+  background-image: radial-gradient(ellipse at 20% 0%, #1a1a3a 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, #0d1a0d 0%, transparent 60%);
+  color: #e0e0e0;
+  font-family: -apple-system, 'Inter', system-ui, sans-serif;
+  padding: 20px;
+  min-height: 100vh;
+}
+.page { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
+/* Cards */
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 18px 20px;
+  backdrop-filter: blur(20px);
+}
+
+/* Header */
+.header {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.day-num { font-size: 36px; font-weight: 800; color: #fff; letter-spacing: -2px; line-height: 1; }
+.day-meta { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.header-stats { display: flex; gap: 24px; align-items: center; }
+.stat { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.stat-val { font-size: 22px; font-weight: 700; color: #fff; }
+.stat-val.green { color: #4ade80; }
+.stat-val.blue { color: #60a5fa; }
+.stat-lbl { font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 1px; text-transform: uppercase; }
+.monk-badge {
+  background: linear-gradient(135deg, rgba(74,222,128,0.15), rgba(74,222,128,0.05));
+  border: 1px solid rgba(74,222,128,0.3);
+  color: #4ade80;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Section label */
+.slabel {
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+/* Grid */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* Schedule blocks */
+.sched-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.sched-item:last-child { border: none; }
+.sched-time { font-size: 11px; color: rgba(255,255,255,0.2); width: 38px; flex-shrink: 0; }
+.sched-block {
+  flex: 1;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.block-build { background: rgba(74,222,128,0.08); border-left: 2px solid #4ade80; color: #4ade80; }
+.block-study { background: rgba(96,165,250,0.08); border-left: 2px solid #60a5fa; color: #60a5fa; }
+.block-routine { background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); }
+.block-gym { background: rgba(251,146,60,0.08); border-left: 2px solid #fb923c; color: #fb923c; }
+.block-break { background: transparent; color: rgba(255,255,255,0.2); font-size: 11px; padding-left: 4px; }
+
+/* Habit rows */
+.habit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.habit-row:last-child { border: none; }
+.habit-name { font-size: 13px; color: rgba(255,255,255,0.6); }
+.habit-right { display: flex; align-items: center; gap: 10px; }
+.streak { font-size: 11px; color: rgba(74,222,128,0.5); }
+.check {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.02);
+  display: flex; align-items: center; justify-content: center;
+}
+.check.done { border-color: #4ade80; background: rgba(74,222,128,0.15); color: #4ade80; font-size: 12px; }
+
+/* Progress */
+.prog-wrap { margin-bottom: 14px; }
+.prog-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.prog-name { font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500; }
+.prog-pct { font-size: 11px; color: rgba(255,255,255,0.3); }
+.prog-bar { height: 5px; background: rgba(255,255,255,0.06); border-radius: 4px; }
+.prog-fill { height: 100%; border-radius: 4px; }
+.fill-blue { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+.fill-green { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.fill-orange { background: linear-gradient(90deg, #fb923c, #ea580c); }
+.fill-purple { background: linear-gradient(90deg, #c084fc, #a855f7); }
+.prog-today { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 5px; }
+
+/* Tasks */
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+}
+.task:last-child { border: none; }
+.task-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.dot-g { background: #4ade80; }
+.dot-b { background: #60a5fa; }
+.dot-o { background: #fb923c; }
+.dot-dim { background: rgba(255,255,255,0.15); }
+
+/* Goal cascade */
+.goal-col { display: flex; flex-direction: column; gap: 6px; }
+.goal-block {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.goal-summer { background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.15); color: rgba(255,255,255,0.6); }
+.goal-week { background: rgba(96,165,250,0.06); border: 1px solid rgba(96,165,250,0.15); color: rgba(255,255,255,0.6); }
+.goal-today { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+.goal-tier-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+.lbl-green { color: rgba(74,222,128,0.6); }
+.lbl-blue { color: rgba(96,165,250,0.6); }
+.lbl-dim { color: rgba(255,255,255,0.2); }
+
+/* Stats heatmap */
+.heatmap { display: grid; grid-template-columns: repeat(28, 1fr); gap: 3px; }
+.hm-cell { height: 14px; border-radius: 3px; background: rgba(255,255,255,0.05); }
+.hm-0 { background: rgba(255,255,255,0.04); }
+.hm-1 { background: rgba(74,222,128,0.2); }
+.hm-2 { background: rgba(74,222,128,0.45); }
+.hm-3 { background: rgba(74,222,128,0.8); }
+
+/* Week tags */
+.week-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.wtag { font-size: 10px; padding: 3px 10px; border-radius: 6px; font-weight: 500; }
+.wtag-active { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.25); }
+.wtag-dim { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.07); }
+
+/* Journal box */
+.journal-box {
+  background: rgba(96,165,250,0.05);
+  border: 1px solid rgba(96,165,250,0.15);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.journal-prompt-lbl { font-size: 9px; letter-spacing: 2px; color: rgba(96,165,250,0.5); margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
+.journal-prompt { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; font-style: italic; }
+
+/* Divider label */
+.col-head { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="day-num">Day 1 <span style="font-size:18px;color:rgba(255,255,255,0.2);font-weight:400;">/ 77</span></div>
+      <div class="day-meta">Friday · May 30, 2025 · Week 1 of 11</div>
+    </div>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-val green">0</div><div class="stat-lbl">Streak</div></div>
+      <div class="stat"><div class="stat-val blue">0%</div><div class="stat-lbl">Summer</div></div>
+      <div class="stat"><div class="stat-val">0/8</div><div class="stat-lbl">Habits</div></div>
+      <div class="monk-badge">Monk Mode Active</div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE + MISSION/HABITS -->
+  <div class="two-col">
+    <div class="card">
+      <div class="slabel">Today's Schedule</div>
+      <div class="sched-item"><div class="sched-time">6:00</div><div class="sched-block block-routine">Morning Protocol — prayer · meditation · cold shower · skincare</div></div>
+      <div class="sched-item"><div class="sched-time">7:00</div><div class="sched-block block-study">AP Calc AB — 1 hour</div></div>
+      <div class="sched-item"><div class="sched-time">8:00</div><div class="sched-block block-study">AP Physics 1 — 1 hour</div></div>
+      <div class="sched-item"><div class="sched-time">9:00</div><div class="sched-block block-study">Spanish 3 — 1 hour</div></div>
+      <div class="sched-item"><div class="sched-time">10:00</div><div class="sched-block block-build">Build — AI Teacher · Block 1 of 6</div></div>
+      <div class="sched-item"><div class="sched-time">11:00</div><div class="sched-block block-build">Build — AI Teacher · Block 2 of 6</div></div>
+      <div class="sched-item"><div class="sched-time">12:00</div><div class="sched-block block-break">— Lunch / Break —</div></div>
+      <div class="sched-item"><div class="sched-time">1:00</div><div class="sched-block block-build">Build — AI Teacher · Block 3 of 6</div></div>
+      <div class="sched-item"><div class="sched-time">2:00</div><div class="sched-block block-build">Build — AI Teacher · Block 4 of 6</div></div>
+      <div class="sched-item"><div class="sched-time">3:00</div><div class="sched-block block-build">Build — AI Teacher · Block 5 of 6</div></div>
+      <div class="sched-item"><div class="sched-time">4:00</div><div class="sched-block block-build">Build — AI Teacher · Block 6 of 6</div></div>
+      <div class="sched-item"><div class="sched-time">5:00</div><div class="sched-block block-gym">Gym — Push Day</div></div>
+      <div class="sched-item"><div class="sched-time">6:30</div><div class="sched-block block-break">— Dinner / Rest —</div></div>
+      <div class="sched-item"><div class="sched-time">8:00</div><div class="sched-block block-routine">Evening Protocol — journal · reading · skincare · Bible</div></div>
+      <div class="sched-item"><div class="sched-time">10:00</div><div class="sched-block block-routine">Sleep</div></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <!-- Mission -->
+      <div class="card">
+        <div class="slabel">Today's Mission</div>
+        <div class="task"><div class="task-dot dot-dim"></div>Scaffold AI Teacher repo + choose tech stack</div>
+        <div class="task"><div class="task-dot dot-dim"></div>Khan Academy: Limits Intro (Calc Unit 1.1)</div>
+        <div class="task"><div class="task-dot dot-dim"></div>Spanish: Vocab Set 1 + Presente de Indicativo</div>
+        <div class="task"><div class="task-dot dot-dim"></div>Day 1 baseline photo — accountability</div>
+        <div class="task"><div class="task-dot dot-dim"></div>Write first journal entry (longer Sunday format)</div>
+      </div>
+
+      <!-- Habits -->
+      <div class="card">
+        <div class="slabel">Daily Protocol</div>
+        <div class="habit-row"><div class="habit-name">Prayer (10–15 min)</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">Meditation (10 min)</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">Cold Shower</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">AM Skincare</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">No Sugar / No Junk</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">Journal</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">PM Skincare</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+        <div class="habit-row"><div class="habit-name">Sleep by 10pm</div><div class="habit-right"><div class="streak">0d</div><div class="check"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACADEMICS + BUILD -->
+  <div class="two-col">
+    <div class="card">
+      <div class="slabel">Academics</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><div class="prog-name">AP Calculus AB</div><div class="prog-pct">Unit 1 / 8 · 0%</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-blue" style="width:0%"></div></div>
+        <div class="prog-today">Today → Limits: An Intuitive Approach (1.1)</div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><div class="prog-name">AP Physics 1</div><div class="prog-pct">Unit 1 / 8 · 0%</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-blue" style="width:0%"></div></div>
+        <div class="prog-today">Today → Kinematics: Position & Velocity (1.1)</div>
+      </div>
+      <div class="prog-wrap" style="margin-bottom:0">
+        <div class="prog-header"><div class="prog-name">Spanish 3</div><div class="prog-pct">Week 1 / 11 · 0%</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-orange" style="width:0%"></div></div>
+        <div class="prog-today">Today → Vocab Set 1 · Presente de Indicativo</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="slabel">Build — AI Teacher for Underserved Communities</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><div class="prog-name">v1 Milestone</div><div class="prog-pct">0% · Ship by Aug 14</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-green" style="width:0%"></div></div>
+      </div>
+      <div class="task"><div class="task-dot dot-dim"></div>Scaffold repo + tech stack decision</div>
+      <div class="task"><div class="task-dot dot-dim"></div>Voice API research (ElevenLabs / Whisper)</div>
+      <div class="task"><div class="task-dot dot-dim"></div>Avatar library research</div>
+      <div class="task" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05);">
+        <div class="task-dot" style="background:rgba(251,146,60,0.4)"></div>
+        <span style="color:rgba(251,146,60,0.45)">Stretch: Demo to orphanage (India) / Sinha / Pratham</span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.2);">Young Longs class: Sunday 5:30–6:15pm · 2–3h hw/week</div>
+    </div>
+  </div>
+
+  <!-- GOAL CASCADE -->
+  <div class="card">
+    <div class="slabel">Goal Cascade — How Today Connects to the Summer</div>
+    <div class="three-col">
+      <div class="goal-col">
+        <div class="col-head" style="color:rgba(74,222,128,0.5)">Build</div>
+        <div class="goal-block goal-summer"><div class="goal-tier-lbl lbl-green">Summer</div>Ship working v1 of AI Teacher (voice + avatar)</div>
+        <div class="goal-block goal-week"><div class="goal-tier-lbl lbl-blue">This Week</div>Scaffold project, pick stack, first voice prototype</div>
+        <div class="goal-block goal-today"><div class="goal-tier-lbl lbl-dim">Today</div>Repo live, voice API researched, first commit pushed</div>
+      </div>
+      <div class="goal-col">
+        <div class="col-head" style="color:rgba(96,165,250,0.5)">Academics</div>
+        <div class="goal-block goal-summer"><div class="goal-tier-lbl lbl-green">Summer</div>Calc Units 1–8 Proficient+. Physics Units 1–8 Proficient+. Spanish conversational.</div>
+        <div class="goal-block goal-week"><div class="goal-tier-lbl lbl-blue">This Week</div>Calc Unit 1. Physics Unit 1. Spanish vocab + grammar Week 1.</div>
+        <div class="goal-block goal-today"><div class="goal-tier-lbl lbl-dim">Today</div>1h Calc · 1h Physics · 1h Spanish — lock in the habit from day 1</div>
+      </div>
+      <div class="goal-col">
+        <div class="col-head" style="color:rgba(192,132,252,0.5)">Personal</div>
+        <div class="goal-block goal-summer"><div class="goal-tier-lbl lbl-green">Summer</div>Become unrecognizable — body, mind, spirit, discipline</div>
+        <div class="goal-block goal-week"><div class="goal-tier-lbl lbl-blue">This Week</div>Establish every habit from day 1. No exceptions. Build the streak.</div>
+        <div class="goal-block goal-today"><div class="goal-tier-lbl lbl-dim">Today</div>All 8 protocol items. Day 1 photo. First journal entry — longer format.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FITNESS + MIND -->
+  <div class="two-col">
+    <div class="card">
+      <div class="slabel">Fitness</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-size:14px;font-weight:600;color:#fb923c;">Today: GYM — Push Day</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.2);">0 / 50 sessions</div>
+      </div>
+      <div class="prog-bar" style="margin-bottom:12px;"><div class="prog-fill fill-orange" style="width:0%"></div></div>
+      <div class="week-tags">
+        <div class="wtag wtag-active">Fri GYM</div>
+        <div class="wtag wtag-dim">Sat CARDIO</div>
+        <div class="wtag wtag-dim">Sun REST</div>
+        <div class="wtag wtag-dim">Mon GYM</div>
+        <div class="wtag wtag-dim">Tue CARDIO</div>
+        <div class="wtag wtag-dim">Wed GYM</div>
+        <div class="wtag wtag-dim">Thu CARDIO</div>
+      </div>
+      <div class="task" style="margin-top:12px;"><div class="task-dot dot-o"></div>Log today's workout — exercises, sets, reps</div>
+      <div class="task"><div class="task-dot dot-dim"></div>Target: 120g+ protein today</div>
+    </div>
+
+    <div class="card">
+      <div class="slabel">Mind</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><div class="prog-name">Atomic Habits</div><div class="prog-pct">0 / ~280 pages</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-purple" style="width:0%"></div></div>
+        <div class="prog-today">Goal: finish by Week 4</div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><div class="prog-name">Proverbs</div><div class="prog-pct">Ch. 0 / 31</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-purple" style="width:0%"></div></div>
+        <div class="prog-today">1 chapter per day</div>
+      </div>
+      <div class="habit-row" style="margin-top:4px;">
+        <div class="habit-name">Weekly Speaking Video</div>
+        <div class="habit-right"><div class="streak" style="color:rgba(192,132,252,0.5)">0 / 10</div><div class="check"></div></div>
+      </div>
+      <div class="journal-box">
+        <div class="journal-prompt-lbl">Tonight's Journal Prompt</div>
+        <div class="journal-prompt">"Day 1. Who are you today — and who do you commit to becoming by August 17th? Be specific."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card">
+    <div class="slabel">Consistency — Last 28 Days</div>
+    <div class="heatmap">
+      <div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div>
+      <div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div>
+      <div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div>
+      <div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-0"></div><div class="hm-cell hm-3"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;color:rgba(255,255,255,0.15);font-size:10px;margin-top:6px;">
+      <span>4 weeks ago</span><span>Today</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

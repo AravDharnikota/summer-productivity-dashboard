@@ -1,0 +1,95 @@
+<h2>How should the dashboard be structured?</h2>
+<p class="subtitle">You have 3 life areas + a goal hierarchy (summer → month → week → day). How do you want to navigate?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:0;border-radius:6px;overflow:hidden;min-height:180px;display:flex;font-family:'Courier New',monospace;">
+      <div style="width:140px;background:#050505;border-right:1px solid #00ff8830;padding:12px 0;display:flex;flex-direction:column;gap:2px;flex-shrink:0;">
+        <div style="color:#00ff88;font-size:9px;letter-spacing:2px;padding:0 12px 8px;opacity:0.5;">SUMMER LOCK-IN</div>
+        <div style="color:#00ff88;font-size:11px;padding:6px 12px;background:#00ff8815;border-left:2px solid #00ff88;">▸ Today</div>
+        <div style="color:#666;font-size:11px;padding:6px 12px;">▸ Goals</div>
+        <div style="color:#666;font-size:11px;padding:6px 12px;">▸ Personal</div>
+        <div style="color:#666;font-size:11px;padding:6px 12px;">▸ Academics</div>
+        <div style="color:#666;font-size:11px;padding:6px 12px;">▸ Build</div>
+        <div style="color:#666;font-size:11px;padding:6px 12px;">▸ Calendar</div>
+      </div>
+      <div style="flex:1;padding:12px;display:flex;flex-direction:column;gap:8px;">
+        <div style="color:#00ff88;font-size:10px;letter-spacing:1px;">TODAY — DAY 14</div>
+        <div style="background:#00ff8810;border:1px solid #00ff8830;padding:8px;border-radius:3px;">
+          <div style="color:#00ff88;font-size:10px;">HABITS 5/8</div>
+          <div style="height:2px;background:#00ff8820;margin-top:4px;border-radius:1px;"><div style="width:62%;height:100%;background:#00ff88;border-radius:1px;"></div></div>
+        </div>
+        <div style="background:#00ff8810;border:1px solid #00ff8830;padding:8px;border-radius:3px;">
+          <div style="color:#00ff88;font-size:10px;">FOCUS BLOCK 2:15 remaining</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Sidebar Navigation</h3>
+      <p>Persistent left sidebar with sections. "Today" is the home screen. Drill into any area from the sidebar.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:0;border-radius:6px;overflow:hidden;min-height:180px;display:flex;flex-direction:column;font-family:'Courier New',monospace;">
+      <div style="background:#050505;border-bottom:1px solid #00ff8830;padding:8px 12px;display:flex;gap:0;font-size:11px;">
+        <div style="color:#00ff88;padding:4px 14px;border-bottom:1px solid #00ff88;margin-bottom:-9px;">TODAY</div>
+        <div style="color:#444;padding:4px 14px;">GOALS</div>
+        <div style="color:#444;padding:4px 14px;">PERSONAL</div>
+        <div style="color:#444;padding:4px 14px;">ACADEMICS</div>
+        <div style="color:#444;padding:4px 14px;">BUILD</div>
+      </div>
+      <div style="padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1;">
+        <div style="background:#00ff8808;border:1px solid #00ff8820;padding:8px;border-radius:3px;">
+          <div style="color:#00ff8880;font-size:9px;letter-spacing:1px;">PERSONAL</div>
+          <div style="color:#00ff88;font-size:16px;font-weight:700;margin-top:4px;">7/8</div>
+          <div style="color:#666;font-size:9px;">habits today</div>
+        </div>
+        <div style="background:#00ff8808;border:1px solid #00ff8820;padding:8px;border-radius:3px;">
+          <div style="color:#00ff8880;font-size:9px;letter-spacing:1px;">ACADEMICS</div>
+          <div style="color:#00ff88;font-size:16px;font-weight:700;margin-top:4px;">2h</div>
+          <div style="color:#666;font-size:9px;">studied</div>
+        </div>
+        <div style="background:#00ff8808;border:1px solid #00ff8820;padding:8px;border-radius:3px;">
+          <div style="color:#00ff8880;font-size:9px;letter-spacing:1px;">BUILD</div>
+          <div style="color:#00ff88;font-size:16px;font-weight:700;margin-top:4px;">3</div>
+          <div style="color:#666;font-size:9px;">tasks done</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Top Tabs + Dashboard Home</h3>
+      <p>Tab bar across the top. Home shows a summary grid of all 3 areas. Tap a tab to go deep into that area.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:12px;border-radius:6px;min-height:180px;display:flex;flex-direction:column;gap:10px;font-family:'Courier New',monospace;">
+      <div style="color:#00ff88;font-size:10px;letter-spacing:2px;">DAY 14 / WEEK 2 / MONTH 1</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;">
+        <div style="background:#050505;border:1px solid #00ff8825;padding:8px;border-radius:3px;grid-column:span 2;">
+          <div style="color:#00ff8870;font-size:9px;letter-spacing:1px;margin-bottom:6px;">TODAY'S MISSION</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="color:#00ff88;font-size:10px;">✓ Morning protocol</div>
+            <div style="color:#666;font-size:10px;">○ 3h deep work — React app</div>
+            <div style="color:#666;font-size:10px;">○ Study: Linear Algebra Ch.4</div>
+          </div>
+        </div>
+        <div style="background:#050505;border:1px solid #00ff8825;padding:8px;border-radius:3px;">
+          <div style="color:#00ff8870;font-size:9px;margin-bottom:4px;">STREAK</div>
+          <div style="color:#00ff88;font-size:18px;font-weight:700;">12d</div>
+        </div>
+        <div style="background:#050505;border:1px solid #00ff8825;padding:8px;border-radius:3px;">
+          <div style="color:#00ff8870;font-size:9px;margin-bottom:4px;">SUMMER %</div>
+          <div style="color:#00ff88;font-size:18px;font-weight:700;">18%</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Daily Command Center</h3>
+      <p>One scroll-down page anchored to today. Everything is visible at once — goals, habits, tasks, calendar. No separate pages, just sections.</p>
+    </div>
+  </div>
+
+</div>

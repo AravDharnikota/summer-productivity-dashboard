@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Lock-In — 3 Pages</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #000; color: #ccc; font-family: -apple-system, 'Inter', system-ui, sans-serif; padding: 20px; }
+h2 { color: #fff; font-size: 18px; margin-bottom: 4px; }
+.subtitle { color: #444; font-size: 13px; margin-bottom: 24px; }
+
+/* Nav tabs */
+.nav { display: flex; gap: 2px; background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 4px; margin-bottom: 20px; max-width: 700px; }
+.nav-btn { flex: 1; padding: 10px; border-radius: 7px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: center; cursor: pointer; transition: all 0.15s; color: #333; border: none; background: transparent; }
+.nav-btn.active { background: #0d1f0d; color: #4ade80; border: 1px solid #1a3a1a; }
+.nav-btn:hover:not(.active) { color: #555; }
+
+/* Pages */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ============ SHARED ============ */
+.card { background: #080808; border: 1px solid #141414; border-radius: 12px; padding: 18px 20px; }
+.card + .card { margin-top: 12px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.slabel { font-size: 9px; color: #2a5a2a; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+.green { color: #4ade80; }
+.dim { color: #333; }
+
+/* Header */
+.header { background: #050505; border: 1px solid #1a1a1a; border-radius: 14px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.day-big { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -2px; line-height: 1; }
+.day-meta { font-size: 11px; color: #2a2a2a; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+.stats-row { display: flex; gap: 28px; align-items: center; }
+.stat { text-align: center; }
+.stat-val { font-size: 24px; font-weight: 700; color: #4ade80; }
+.stat-lbl { font-size: 9px; color: #2a2a2a; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+.badge { background: #0a1f0a; border: 1px solid #1a3a1a; color: #4ade80; padding: 8px 16px; border-radius: 20px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+
+/* Schedule */
+.sched-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid #0a0a0a; }
+.sched-row:last-child { border: none; }
+.sched-time { font-size: 10px; color: #222; width: 36px; flex-shrink: 0; }
+.block { flex: 1; padding: 6px 11px; border-radius: 6px; font-size: 11px; font-weight: 500; }
+.b-build { background: #0a1a0a; border-left: 2px solid #4ade80; color: #4ade80; }
+.b-study { background: #0a0f1a; border-left: 2px solid #3b82f6; color: #3b82f6; }
+.b-routine { background: #0f0f0f; border-left: 2px solid #1e1e1e; color: #333; }
+.b-gym { background: #1a0f0a; border-left: 2px solid #fb923c; color: #fb923c; }
+.b-break { color: #1a1a1a; font-size: 10px; padding-left: 2px; }
+
+/* Habits */
+.habit { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #0c0c0c; }
+.habit:last-child { border: none; }
+.habit-name { font-size: 12px; color: #555; }
+.habit-r { display: flex; align-items: center; gap: 10px; }
+.streak { font-size: 10px; color: #1a3a1a; }
+.box { width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid #1a1a1a; background: #050505; display: flex; align-items: center; justify-content: center; }
+.box.done { border-color: #4ade80; background: #0a1f0a; color: #4ade80; font-size: 11px; }
+
+/* Progress */
+.prog { margin-bottom: 12px; }
+.prog:last-child { margin-bottom: 0; }
+.prog-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.prog-name { font-size: 12px; color: #666; font-weight: 500; }
+.prog-pct { font-size: 10px; color: #2a2a2a; }
+.prog-bar { height: 4px; background: #0f0f0f; border-radius: 3px; }
+.prog-fill { height: 100%; border-radius: 3px; }
+.fill-g { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.fill-b { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.fill-o { background: linear-gradient(90deg, #fb923c, #ea580c); }
+.fill-p { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+.prog-sub { font-size: 10px; color: #222; margin-top: 4px; }
+
+/* Tasks */
+.task { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #0a0a0a; font-size: 12px; color: #444; }
+.task:last-child { border: none; }
+.tdot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+
+/* Goal cascade */
+.gc-block { padding: 9px 11px; border-radius: 8px; font-size: 11px; line-height: 1.5; margin-bottom: 6px; }
+.gc-summer { background: #0a1a0a; border: 1px solid #1a3a1a; color: #555; }
+.gc-week { background: #0a0f1a; border: 1px solid #1a2a3a; color: #555; }
+.gc-today { background: #0c0c0c; border: 1px solid #141414; color: #444; }
+.gc-lbl { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
+.gc-lbl-g { color: #1a4a1a; }
+.gc-lbl-b { color: #1a2a4a; }
+.gc-lbl-d { color: #1e1e1e; }
+
+/* Heatmap */
+.heatmap { display: grid; grid-template-columns: repeat(28, 1fr); gap: 3px; }
+.hm { height: 13px; border-radius: 2px; background: #0c0c0c; }
+.hm3 { background: #4ade80; }
+
+/* ============ CALENDAR ============ */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day-head { text-align: center; font-size: 9px; letter-spacing: 2px; color: #222; text-transform: uppercase; padding-bottom: 6px; }
+.cal-day { min-height: 64px; background: #050505; border: 1px solid #0f0f0f; border-radius: 8px; padding: 6px 8px; position: relative; }
+.cal-day.today { border-color: #4ade80; background: #080f08; }
+.cal-day.off { background: #0a0505; border-color: #1a0a0a; }
+.cal-day.past { opacity: 0.4; }
+.cal-num { font-size: 11px; color: #333; margin-bottom: 4px; }
+.cal-day.today .cal-num { color: #4ade80; font-weight: 700; }
+.cal-pip { width: 5px; height: 5px; border-radius: 50%; display: inline-block; margin-right: 2px; margin-top: 2px; }
+.pip-g { background: #4ade80; }
+.pip-b { background: #3b82f6; }
+.pip-o { background: #fb923c; }
+.pip-r { background: #f87171; }
+.cal-day-label { font-size: 9px; color: #333; margin-top: 3px; }
+.cal-day.off .cal-num { color: #f87171; }
+.cal-day.off .cal-day-label { color: #3a1a1a; }
+.month-label { font-size: 11px; color: #2a2a2a; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+
+/* ============ OVERVIEW ============ */
+.ov-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+.ov-stat { background: #050505; border: 1px solid #0f0f0f; border-radius: 10px; padding: 16px; text-align: center; }
+.ov-val { font-size: 28px; font-weight: 800; color: #4ade80; letter-spacing: -1px; }
+.ov-val.dim { color: #1a1a1a; }
+.ov-lbl { font-size: 9px; color: #222; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+.mini-prog { margin-bottom: 8px; }
+.mini-prog-head { display: flex; justify-content: space-between; margin-bottom: 3px; font-size: 11px; }
+.mini-prog-bar { height: 3px; background: #0f0f0f; border-radius: 2px; }
+</style>
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</head>
+<body>
+
+<h2>Summer Lock-In Dashboard</h2>
+<p class="subtitle">Click between the 3 pages — black & green theme</p>
+
+<div class="nav">
+  <button class="nav-btn" onclick="showPage('page-today', this)">Today</button>
+  <button class="nav-btn active" onclick="showPage('page-overview', this)">Overview</button>
+  <button class="nav-btn" onclick="showPage('page-calendar', this)">Calendar</button>
+</div>
+
+<!-- ==================== OVERVIEW ==================== -->
+<div id="page-overview" class="page active">
+
+  <div class="ov-stat-grid">
+    <div class="ov-stat"><div class="ov-val dim">0</div><div class="ov-lbl">Day Streak</div></div>
+    <div class="ov-stat"><div class="ov-val dim">0%</div><div class="ov-lbl">Summer Done</div></div>
+    <div class="ov-stat"><div class="ov-val dim">0/77</div><div class="ov-lbl">Days Completed</div></div>
+    <div class="ov-stat"><div class="ov-val dim">0/8</div><div class="ov-lbl">Today's Habits</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="slabel">Summer Goals</div>
+      <div class="prog">
+        <div class="prog-head"><div class="prog-name">AI Teacher v1</div><div class="prog-pct green">Ship by Aug 14</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-g" style="width:0%"></div></div>
+      </div>
+      <div class="prog">
+        <div class="prog-head"><div class="prog-name">AP Calculus AB</div><div class="prog-pct">Units 1–8 Proficient+</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-b" style="width:0%"></div></div>
+      </div>
+      <div class="prog">
+        <div class="prog-head"><div class="prog-name">AP Physics 1</div><div class="prog-pct">Units 1–8 Proficient+</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-b" style="width:0%"></div></div>
+      </div>
+      <div class="prog">
+        <div class="prog-head"><div class="prog-name">Spanish 3</div><div class="prog-pct">Conversational fluency</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-o" style="width:0%"></div></div>
+      </div>
+      <div class="prog">
+        <div class="prog-head"><div class="prog-name">Body</div><div class="prog-pct">50+ sessions · 2mi run</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-o" style="width:0%"></div></div>
+      </div>
+      <div class="prog">
+        <div class="prog-head"><div class="prog-name">Mind</div><div class="prog-pct">2 books · 10 videos</div></div>
+        <div class="prog-bar"><div class="prog-fill fill-p" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card">
+        <div class="slabel">Monk Mode Status</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-size:13px;color:#4ade80;font-weight:600;">ACTIVE — Day 1 of 77</div>
+          <div class="badge">On Track</div>
+        </div>
+        <div style="font-size:11px;color:#1a1a1a;margin-bottom:6px;">May 30 → Aug 14 &nbsp;·&nbsp; Off days: Jun 6, 7, 16 · Jul 11, 19</div>
+        <div class="prog-bar"><div class="prog-fill fill-g" style="width:1%"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="slabel">Personal Milestones</div>
+        <div class="task"><div class="tdot" style="background:#4ade80"></div>50+ gym sessions logged</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Run 2 miles continuously</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Finish Atomic Habits (Week 4)</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Finish HTWFAIP (Week 8)</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Read Proverbs cover to cover</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>10 speaking videos recorded</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>70 journal entries</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Modern AI course complete</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Claude/AI mastery course done</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <div class="slabel">Consistency — Last 28 Days</div>
+    <div class="heatmap">
+      <div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div>
+      <div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div>
+      <div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div>
+      <div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm"></div><div class="hm hm3"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;color:#1a1a1a;font-size:10px;margin-top:6px;"><span>4 weeks ago</span><span>Today</span></div>
+  </div>
+
+</div>
+
+<!-- ==================== TODAY ==================== -->
+<div id="page-today" class="page">
+
+  <div class="header">
+    <div>
+      <div class="day-big">Day 1 <span style="font-size:18px;color:#1a1a1a;font-weight:400;">/ 77</span></div>
+      <div class="day-meta">Friday · May 30, 2025 · Week 1 of 11</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val">0</div><div class="stat-lbl">Streak</div></div>
+      <div class="stat"><div class="stat-val">0%</div><div class="stat-lbl">Summer</div></div>
+      <div class="stat"><div class="stat-val">0/8</div><div class="stat-lbl">Habits</div></div>
+      <div class="badge">Monk Mode</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="slabel">Today's Schedule</div>
+      <div class="sched-row"><div class="sched-time">6:00</div><div class="block b-routine">Morning Protocol — prayer · meditation · cold shower</div></div>
+      <div class="sched-row"><div class="sched-time">7:00</div><div class="block b-study">AP Calculus AB — 1 hour</div></div>
+      <div class="sched-row"><div class="sched-time">8:00</div><div class="block b-study">AP Physics 1 — 1 hour</div></div>
+      <div class="sched-row"><div class="sched-time">9:00</div><div class="block b-study">Spanish 3 — 1 hour</div></div>
+      <div class="sched-row"><div class="sched-time">10:00</div><div class="block b-build">Build — AI Teacher · Block 1/6</div></div>
+      <div class="sched-row"><div class="sched-time">11:00</div><div class="block b-build">Build — AI Teacher · Block 2/6</div></div>
+      <div class="sched-row"><div class="sched-time">12:00</div><div class="block b-break">— Lunch / Break —</div></div>
+      <div class="sched-row"><div class="sched-time">1:00</div><div class="block b-build">Build — AI Teacher · Block 3/6</div></div>
+      <div class="sched-row"><div class="sched-time">2:00</div><div class="block b-build">Build — AI Teacher · Block 4/6</div></div>
+      <div class="sched-row"><div class="sched-time">3:00</div><div class="block b-build">Build — AI Teacher · Block 5/6</div></div>
+      <div class="sched-row"><div class="sched-time">4:00</div><div class="block b-build">Build — AI Teacher · Block 6/6</div></div>
+      <div class="sched-row"><div class="sched-time">5:00</div><div class="block b-gym">Gym — Push Day</div></div>
+      <div class="sched-row"><div class="sched-time">6:30</div><div class="block b-break">— Dinner / Rest —</div></div>
+      <div class="sched-row"><div class="sched-time">8:00</div><div class="block b-routine">Evening Protocol — journal · reading · skincare</div></div>
+      <div class="sched-row"><div class="sched-time">10:00</div><div class="block b-routine">Sleep</div></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card">
+        <div class="slabel">Today's Mission</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Scaffold AI Teacher repo + pick tech stack</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Khan: Limits Intro (Calc 1.1)</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Spanish: Vocab Set 1 + grammar review</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Day 1 baseline photo</div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Write first journal entry</div>
+      </div>
+      <div class="card">
+        <div class="slabel">Daily Protocol</div>
+        <div class="habit"><div class="habit-name">Prayer (10–15 min)</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">Meditation (10 min)</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">Cold Shower</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">AM Skincare</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">No Sugar / No Junk</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">Journal</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">PM Skincare</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+        <div class="habit"><div class="habit-name">Sleep by 10pm</div><div class="habit-r"><div class="streak">0d</div><div class="box"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div class="card">
+      <div class="slabel">Academics</div>
+      <div class="prog"><div class="prog-head"><div class="prog-name">AP Calc AB</div><div class="prog-pct">Unit 1/8</div></div><div class="prog-bar"><div class="prog-fill fill-b" style="width:0%"></div></div><div class="prog-sub">Today → Limits: An Intuitive Approach (1.1)</div></div>
+      <div class="prog"><div class="prog-head"><div class="prog-name">AP Physics 1</div><div class="prog-pct">Unit 1/8</div></div><div class="prog-bar"><div class="prog-fill fill-b" style="width:0%"></div></div><div class="prog-sub">Today → Kinematics: Position & Velocity</div></div>
+      <div class="prog" style="margin-bottom:0"><div class="prog-head"><div class="prog-name">Spanish 3</div><div class="prog-pct">Week 1/11</div></div><div class="prog-bar"><div class="prog-fill fill-o" style="width:0%"></div></div><div class="prog-sub">Today → Vocab Set 1 · Presente de Indicativo</div></div>
+    </div>
+    <div class="card">
+      <div class="slabel">Build — AI Teacher</div>
+      <div class="prog"><div class="prog-head"><div class="prog-name">v1 Milestone</div><div class="prog-pct green">Ship Aug 14</div></div><div class="prog-bar"><div class="prog-fill fill-g" style="width:0%"></div></div></div>
+      <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Scaffold repo + choose tech stack</div>
+      <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Voice API research (ElevenLabs / Whisper)</div>
+      <div class="task"><div class="tdot" style="background:#1a1a1a"></div>Avatar library research</div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid #0c0c0c;">
+        <div class="task"><div class="tdot" style="background:#fb923c40"></div><span style="color:#fb923c40">Stretch: Demo to orphanage / Sinha / Pratham</span></div>
+        <div class="task"><div class="tdot" style="background:#1a1a1a"></div><span style="color:#222">Young Longs: Sunday 5:30pm · 2–3h hw/wk</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <div class="slabel">Goal Cascade</div>
+    <div class="three-col">
+      <div>
+        <div style="font-size:10px;color:#1a3a1a;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px;">Build</div>
+        <div class="gc-block gc-summer"><div class="gc-lbl gc-lbl-g">Summer</div>Ship v1 of AI Teacher (voice + avatar)</div>
+        <div class="gc-block gc-week"><div class="gc-lbl gc-lbl-b">This Week</div>Scaffold, pick stack, first voice prototype</div>
+        <div class="gc-block gc-today"><div class="gc-lbl gc-lbl-d">Today</div>Repo live · voice API researched · first commit</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:#1a2a4a;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px;">Academics</div>
+        <div class="gc-block gc-summer"><div class="gc-lbl gc-lbl-g">Summer</div>Calc + Physics Units 1–8 Proficient+. Spanish conversational.</div>
+        <div class="gc-block gc-week"><div class="gc-lbl gc-lbl-b">This Week</div>Calc Unit 1 · Physics Unit 1 · Spanish Wk 1</div>
+        <div class="gc-block gc-today"><div class="gc-lbl gc-lbl-d">Today</div>1h each subject — lock in the habit from day 1</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:#2a1a4a;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px;">Personal</div>
+        <div class="gc-block gc-summer"><div class="gc-lbl gc-lbl-g">Summer</div>Become unrecognizable — body, mind, spirit</div>
+        <div class="gc-block gc-week"><div class="gc-lbl gc-lbl-b">This Week</div>Establish every habit from day 1. Build the streak.</div>
+        <div class="gc-block gc-today"><div class="gc-lbl gc-lbl-d">Today</div>All 8 protocol items · Day 1 photo · first journal</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== CALENDAR ==================== -->
+<div id="page-calendar" class="page">
+
+  <div class="card">
+    <div class="slabel">Summer Lock-In Calendar — May → August</div>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:16px;margin-bottom:16px;font-size:10px;color:#333;flex-wrap:wrap;">
+      <span><span class="cal-pip pip-g"></span>Monk Mode day</span>
+      <span><span class="cal-pip pip-r"></span>Off day</span>
+      <span><span class="cal-pip pip-b"></span>Study</span>
+      <span><span class="cal-pip pip-o"></span>Gym</span>
+      <span style="color:#4ade80;font-weight:600;">Outlined = Today</span>
+    </div>
+
+    <!-- MAY -->
+    <div class="month-label">May 2025</div>
+    <div class="cal-grid" style="margin-bottom:16px;">
+      <div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>
+      <!-- Week of May 25 -->
+      <div class="cal-day past"><div class="cal-num">25</div></div>
+      <div class="cal-day past"><div class="cal-num">26</div></div>
+      <div class="cal-day past"><div class="cal-num">27</div></div>
+      <div class="cal-day past"><div class="cal-num">28</div></div>
+      <div class="cal-day past"><div class="cal-num">29</div></div>
+      <div class="cal-day today"><div class="cal-num">30</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div><div class="cal-day-label">Day 1</div></div>
+      <div class="cal-day"><div class="cal-num">31</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-b"></span></div><div class="cal-day-label">Day 2</div></div>
+    </div>
+
+    <!-- JUNE -->
+    <div class="month-label">June 2025</div>
+    <div class="cal-grid" style="margin-bottom:16px;">
+      <div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>
+      <div class="cal-day"><div class="cal-num">1</div><div><span class="cal-pip pip-g"></span></div><div class="cal-day-label">Day 3</div></div>
+      <div class="cal-day"><div class="cal-num">2</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">3</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">4</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">5</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day off"><div class="cal-num">6</div><div class="cal-day-label">OFF</div></div>
+      <div class="cal-day off"><div class="cal-num">7</div><div class="cal-day-label">OFF</div></div>
+      <div class="cal-day"><div class="cal-num">8</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">9</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">10</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">11</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">12</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">13</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">14</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">15</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day off"><div class="cal-num">16</div><div class="cal-day-label">OFF</div></div>
+      <div class="cal-day"><div class="cal-num">17</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">18</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">19</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">20</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">21</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">22</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">23</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">24</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">25</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">26</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">27</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">28</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">29</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">30</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div style="background:transparent;border:none;"></div>
+    </div>
+
+    <!-- JULY -->
+    <div class="month-label">July 2025</div>
+    <div class="cal-grid" style="margin-bottom:16px;">
+      <div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>
+      <div style="background:transparent;border:none;min-height:0"></div>
+      <div class="cal-day"><div class="cal-num">1</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">2</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">3</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">4</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">5</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">6</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">7</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">8</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">9</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">10</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day off"><div class="cal-num">11</div><div class="cal-day-label">OFF</div></div>
+      <div class="cal-day"><div class="cal-num">12</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">13</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">14</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">15</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">16</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">17</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">18</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day off"><div class="cal-num">19</div><div class="cal-day-label">OFF</div></div>
+      <div class="cal-day"><div class="cal-num">20</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">21</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">22</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">23</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">24</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">25</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">26</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">27</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">28</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">29</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">30</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">31</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+    </div>
+
+    <!-- AUGUST -->
+    <div class="month-label">August 2025</div>
+    <div class="cal-grid">
+      <div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>
+      <div style="background:transparent;border:none;min-height:0"></div><div style="background:transparent;border:none;min-height:0"></div><div style="background:transparent;border:none;min-height:0"></div><div style="background:transparent;border:none;min-height:0"></div><div style="background:transparent;border:none;min-height:0"></div>
+      <div class="cal-day"><div class="cal-num">1</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">2</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">3</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">4</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">5</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">6</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">7</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">8</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">9</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">10</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">11</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day"><div class="cal-num">12</div><div><span class="cal-pip pip-g"></span><span class="cal-pip pip-o"></span></div></div>
+      <div class="cal-day"><div class="cal-num">13</div><div><span class="cal-pip pip-g"></span></div></div>
+      <div class="cal-day" style="border-color:#4ade8060;background:#080f08"><div class="cal-num" style="color:#4ade80">14</div><div><span class="cal-pip pip-g"></span></div><div class="cal-day-label" style="color:#1a3a1a;">Day 77 🏁</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

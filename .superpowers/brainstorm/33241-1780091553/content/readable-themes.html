@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme Options — Readable</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #111; font-family: -apple-system, 'Inter', system-ui, sans-serif; padding: 24px; }
+h2 { color: #fff; font-size: 18px; margin-bottom: 4px; }
+.sub { color: #666; font-size: 13px; margin-bottom: 24px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s; }
+.card:hover { border-color: rgba(255,255,255,0.2); }
+.card.selected { border-color: #fff; }
+.preview { padding: 20px; min-height: 240px; }
+.meta { padding: 14px 16px; }
+.meta h3 { font-size: 14px; margin-bottom: 4px; }
+.meta p { font-size: 12px; opacity: 0.55; line-height: 1.5; }
+
+/* ── A: Carbon ── */
+.a .preview { background: #161616; }
+.a .meta { background: #1c1c1c; color: #f4f4f4; }
+.a-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.a-day { font-size: 32px; font-weight: 800; color: #f4f4f4; letter-spacing: -1.5px; }
+.a-sub { font-size: 11px; color: #6f6f6f; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.a-badge { background: #0f3d0f; border: 1px solid #198019; color: #42be65; padding: 5px 12px; border-radius: 4px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+.a-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #262626; }
+.a-row:last-child { border: none; }
+.a-label { font-size: 13px; color: #c6c6c6; }
+.a-check { width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid #393939; background: #262626; }
+.a-check.on { border-color: #42be65; background: #0f3d0f; display: flex; align-items: center; justify-content: center; color: #42be65; font-size: 12px; }
+.a-streak { font-size: 11px; color: #42be65; opacity: 0.6; margin-right: 8px; }
+.a-bar { height: 4px; background: #262626; border-radius: 2px; margin-top: 14px; }
+.a-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #42be65, #24a148); width: 0%; }
+
+/* ── B: Zinc ── */
+.b .preview { background: #18181b; }
+.b .meta { background: #1c1c1f; color: #fafafa; }
+.b-day { font-size: 30px; font-weight: 700; color: #fff; letter-spacing: -1px; margin-bottom: 4px; }
+.b-meta { font-size: 11px; color: #52525b; margin-bottom: 14px; letter-spacing: 0.5px; }
+.b-pills { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.b-pill { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.b-green { background: #14532d; color: #4ade80; border: 1px solid #166534; }
+.b-dim { background: #27272a; color: #71717a; border: 1px solid #3f3f46; }
+.b-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #27272a; font-size: 12px; color: #a1a1aa; }
+.b-row:last-child { border: none; }
+.b-dot { width: 6px; height: 6px; border-radius: 50%; background: #3f3f46; flex-shrink: 0; }
+.b-dot.g { background: #4ade80; }
+
+/* ── C: Slate ── */
+.c .preview { background: #0f172a; }
+.c .meta { background: #131c31; color: #f1f5f9; }
+.c-header { font-size: 11px; color: #334155; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+.c-day { font-size: 28px; font-weight: 800; color: #f1f5f9; letter-spacing: -1px; margin-bottom: 14px; }
+.c-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.c-stat { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px; }
+.c-val { font-size: 20px; font-weight: 700; color: #4ade80; margin-bottom: 2px; }
+.c-lbl { font-size: 9px; color: #475569; letter-spacing: 1px; text-transform: uppercase; }
+.c-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #1e293b; font-size: 12px; color: #94a3b8; }
+.c-item:last-child { border: none; }
+.c-box { width: 18px; height: 18px; border-radius: 4px; border: 1.5px solid #334155; background: #1e293b; }
+
+/* ── D: Forest ── */
+.d .preview { background: #0d1117; }
+.d .meta { background: #111820; color: #e6edf3; }
+.d-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.d-day { font-size: 28px; font-weight: 800; color: #e6edf3; letter-spacing: -1px; }
+.d-tag { background: #1a4a1a; border: 1px solid #2a6a2a; color: #56d364; padding: 4px 10px; border-radius: 4px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+.d-meta-txt { font-size: 11px; color: #30363d; margin-bottom: 12px; }
+.d-section { margin-bottom: 10px; }
+.d-slabel { font-size: 9px; color: #30363d; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+.d-habit { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #161b22; font-size: 12px; color: #8b949e; }
+.d-habit:last-child { border: none; }
+.d-cb { width: 18px; height: 18px; border-radius: 3px; border: 1.5px solid #30363d; background: #161b22; }
+.d-prog { height: 3px; background: #21262d; border-radius: 2px; margin-top: 8px; }
+.d-prog-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #56d364, #3fb950); width: 0%; }
+</style>
+<script>
+function pick(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (window.recordChoice) recordChoice(el.dataset.choice, el.querySelector('h3').textContent);
+}
+</script>
+</head>
+<body>
+<h2>Pick a readable theme</h2>
+<p class="sub">All black & green — just different contrast and style. Click to pick.</p>
+<div class="grid">
+
+  <!-- A: Carbon -->
+  <div class="card a" data-choice="a" onclick="pick(this)">
+    <div class="preview">
+      <div class="a-head">
+        <div><div class="a-day">Day 1</div><div class="a-sub">Friday · May 30 · Week 1</div></div>
+        <div class="a-badge">Monk Mode</div>
+      </div>
+      <div class="a-row"><div class="a-label">Prayer</div><div style="display:flex;align-items:center"><span class="a-streak">0d</span><div class="a-check on">✓</div></div></div>
+      <div class="a-row"><div class="a-label">Meditation</div><div style="display:flex;align-items:center"><span class="a-streak">0d</span><div class="a-check"></div></div></div>
+      <div class="a-row"><div class="a-label">Cold Shower</div><div style="display:flex;align-items:center"><span class="a-streak">0d</span><div class="a-check"></div></div></div>
+      <div class="a-row"><div class="a-label">No Sugar / No Junk</div><div style="display:flex;align-items:center"><span class="a-streak">0d</span><div class="a-check"></div></div></div>
+      <div class="a-bar"><div class="a-fill"></div></div>
+    </div>
+    <div class="meta">
+      <h3>Carbon</h3>
+      <p>IBM-inspired dark. True blacks, warm grays, crisp IBM green. High contrast, very legible, serious and clean.</p>
+    </div>
+  </div>
+
+  <!-- B: Zinc -->
+  <div class="card b" data-choice="b" onclick="pick(this)">
+    <div class="preview">
+      <div class="b-day">Day 1 / 77</div>
+      <div class="b-meta">Friday · May 30, 2025 · Monk Mode Active</div>
+      <div class="b-pills">
+        <div class="b-pill b-green">0 day streak</div>
+        <div class="b-pill b-dim">0% summer</div>
+        <div class="b-pill b-dim">0 / 8 habits</div>
+      </div>
+      <div class="b-row"><div class="b-dot g"></div>Scaffold AI Teacher repo</div>
+      <div class="b-row"><div class="b-dot"></div>AP Calc: Limits Intro (1.1)</div>
+      <div class="b-row"><div class="b-dot"></div>Spanish: Vocab Set 1</div>
+      <div class="b-row"><div class="b-dot"></div>Day 1 baseline photo</div>
+    </div>
+    <div class="meta">
+      <h3>Zinc</h3>
+      <p>Zinc-gray dark background, vivid green accents, clear type. Modern and spacious — easy to scan at a glance.</p>
+    </div>
+  </div>
+
+  <!-- C: Slate -->
+  <div class="card c" data-choice="c" onclick="pick(this)">
+    <div class="preview">
+      <div class="c-header">Summer Lock-In</div>
+      <div class="c-day">Day 1 — May 30</div>
+      <div class="c-grid">
+        <div class="c-stat"><div class="c-val">0</div><div class="c-lbl">Streak</div></div>
+        <div class="c-stat"><div class="c-val">0%</div><div class="c-lbl">Summer</div></div>
+        <div class="c-stat"><div class="c-val">0/8</div><div class="c-lbl">Habits</div></div>
+        <div class="c-stat"><div class="c-val">6h</div><div class="c-lbl">Build</div></div>
+      </div>
+      <div class="c-item">Prayer <div class="c-box"></div></div>
+      <div class="c-item">Meditation <div class="c-box"></div></div>
+    </div>
+    <div class="meta">
+      <h3>Slate</h3>
+      <p>Deep blue-black, slate grays, green accents. Feels like a polished product dashboard. Premium and calm.</p>
+    </div>
+  </div>
+
+  <!-- D: Forest / GitHub -->
+  <div class="card d" data-choice="d" onclick="pick(this)">
+    <div class="preview">
+      <div class="d-top">
+        <div class="d-day">Day 1</div>
+        <div class="d-tag">Monk Mode</div>
+      </div>
+      <div class="d-meta-txt">Friday · May 30, 2025 · Week 1 of 11</div>
+      <div class="d-section">
+        <div class="d-slabel">Protocol</div>
+        <div class="d-habit">Prayer (10–15 min) <div class="d-cb"></div></div>
+        <div class="d-habit">Meditation (10 min) <div class="d-cb"></div></div>
+        <div class="d-habit">Cold Shower <div class="d-cb"></div></div>
+        <div class="d-habit">No Sugar / No Junk <div class="d-cb"></div></div>
+      </div>
+      <div class="d-prog"><div class="d-prog-fill"></div></div>
+    </div>
+    <div class="meta">
+      <h3>Forest</h3>
+      <p>GitHub dark-inspired. Very readable, familiar, no-nonsense. Solid contrast with forest green. The developer aesthetic.</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

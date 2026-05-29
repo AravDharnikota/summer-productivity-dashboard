@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Command Center — Layout Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #080808;
+    color: #ccc;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 16px;
+    min-height: 100vh;
+  }
+  .page { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Header */
+  .header {
+    background: #050505;
+    border: 1px solid #00ff8840;
+    border-radius: 4px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left { display: flex; flex-direction: column; gap: 3px; }
+  .day-label { color: #00ff88; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+  .date-label { color: #555; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+  .header-right { display: flex; gap: 16px; align-items: center; }
+  .stat-pill { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .stat-val { color: #00ff88; font-size: 16px; font-weight: 700; }
+  .stat-lbl { color: #444; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+  .monk-badge { background: #00ff8820; border: 1px solid #00ff8850; color: #00ff88; padding: 4px 10px; font-size: 10px; letter-spacing: 1px; border-radius: 2px; }
+
+  /* Section headers */
+  .section-label { color: #00ff8870; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* Grid layouts */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  /* Card */
+  .card {
+    background: #050505;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 12px;
+  }
+  .card:hover { border-color: #00ff8830; }
+
+  /* Schedule */
+  .schedule-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    height: 32px;
+    margin-bottom: 2px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .time-col { width: 44px; color: #333; font-size: 9px; display: flex; align-items: center; flex-shrink: 0; }
+  .block {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 10px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+  }
+  .block-build { background: #00ff8815; border-left: 2px solid #00ff88; color: #00ff88; }
+  .block-study { background: #0088ff15; border-left: 2px solid #0088ff; color: #0088ff; }
+  .block-routine { background: #ffffff08; border-left: 2px solid #333; color: #555; }
+  .block-gym { background: #ff880015; border-left: 2px solid #ff8800; color: #ff8800; }
+  .block-free { background: #ffffff05; border-left: 1px solid #1a1a1a; color: #333; }
+
+  /* Habit tracker */
+  .habit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #0f0f0f;
+  }
+  .habit-row:last-child { border-bottom: none; }
+  .habit-name { color: #888; font-size: 11px; }
+  .habit-right { display: flex; align-items: center; gap: 8px; }
+  .streak { color: #00ff8870; font-size: 10px; }
+  .checkbox { width: 14px; height: 14px; border: 1px solid #333; border-radius: 2px; display: flex; align-items: center; justify-content: center; }
+  .checkbox.done { border-color: #00ff88; background: #00ff8820; color: #00ff88; font-size: 9px; }
+
+  /* Goal cascade */
+  .goal-tier {
+    padding: 8px 10px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .goal-summer { background: #00ff8810; border-left: 2px solid #00ff88; }
+  .goal-week { background: #0088ff10; border-left: 2px solid #0088ff; }
+  .goal-today { background: #ffffff08; border-left: 2px solid #333; }
+  .goal-tier-label { font-size: 8px; letter-spacing: 2px; color: #555; min-width: 52px; padding-top: 1px; text-transform: uppercase; }
+  .goal-text { font-size: 11px; color: #aaa; line-height: 1.4; }
+
+  /* Progress bar */
+  .prog-bar { height: 3px; background: #111; border-radius: 2px; margin-top: 6px; }
+  .prog-fill { height: 100%; border-radius: 2px; }
+  .prog-green { background: linear-gradient(90deg, #00ff88, #00cc66); }
+  .prog-blue { background: linear-gradient(90deg, #0088ff, #0066cc); }
+  .prog-orange { background: linear-gradient(90deg, #ff8800, #cc6600); }
+
+  /* Task list */
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #0f0f0f;
+    font-size: 11px;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: #00ff88; }
+  .dot-blue { background: #0088ff; }
+  .dot-dim { background: #333; }
+  .task-text { color: #888; }
+  .task-text.done { color: #444; text-decoration: line-through; }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .stats-cell { height: 12px; border-radius: 1px; background: #111; }
+  .stats-cell.low { background: #00ff8830; }
+  .stats-cell.mid { background: #00ff8860; }
+  .stats-cell.high { background: #00ff88; }
+
+  /* Subject row */
+  .subject-row { margin-bottom: 10px; }
+  .subject-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .subject-name { color: #888; font-size: 11px; }
+  .subject-pct { color: #00ff8870; font-size: 10px; }
+
+  /* Note */
+  .note { color: #333; font-size: 10px; text-align: center; padding: 8px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="day-label">DAY 1 / 77 &nbsp;—&nbsp; MAY 30</div>
+      <div class="date-label">Friday · Week 1 of 11 · Summer Lock-In</div>
+    </div>
+    <div class="header-right">
+      <div class="stat-pill">
+        <div class="stat-val">0</div>
+        <div class="stat-lbl">Streak</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-val">0%</div>
+        <div class="stat-lbl">Summer</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-val">0/8</div>
+        <div class="stat-lbl">Today</div>
+      </div>
+      <div class="monk-badge">MONK MODE ACTIVE</div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE + MISSION -->
+  <div class="two-col">
+
+    <!-- Daily Schedule -->
+    <div class="card">
+      <div class="section-label">Today's Schedule</div>
+      <div class="schedule-row"><div class="time-col">6:00</div><div class="block block-routine">Morning Protocol — prayer · meditation · cold shower · skincare</div></div>
+      <div class="schedule-row"><div class="time-col">7:00</div><div class="block block-study">AP Calc AB — 1 hour</div></div>
+      <div class="schedule-row"><div class="time-col">8:00</div><div class="block block-study">AP Physics 1 — 1 hour</div></div>
+      <div class="schedule-row"><div class="time-col">9:00</div><div class="block block-study">Spanish 3 — 1 hour</div></div>
+      <div class="schedule-row"><div class="time-col">10:00</div><div class="block block-build">Build — AI Teacher Project [1 of 6h]</div></div>
+      <div class="schedule-row"><div class="time-col">11:00</div><div class="block block-build">Build — AI Teacher Project [2 of 6h]</div></div>
+      <div class="schedule-row"><div class="time-col">12:00</div><div class="block block-free">Lunch / Break</div></div>
+      <div class="schedule-row"><div class="time-col">1:00</div><div class="block block-build">Build — AI Teacher Project [3 of 6h]</div></div>
+      <div class="schedule-row"><div class="time-col">2:00</div><div class="block block-build">Build — AI Teacher Project [4 of 6h]</div></div>
+      <div class="schedule-row"><div class="time-col">3:00</div><div class="block block-build">Build — AI Teacher Project [5 of 6h]</div></div>
+      <div class="schedule-row"><div class="time-col">4:00</div><div class="block block-build">Build — AI Teacher Project [6 of 6h]</div></div>
+      <div class="schedule-row"><div class="time-col">5:00</div><div class="block block-gym">Gym — Push Day</div></div>
+      <div class="schedule-row"><div class="time-col">6:30</div><div class="block block-free">Dinner / Rest</div></div>
+      <div class="schedule-row"><div class="time-col">8:00</div><div class="block block-routine">Evening Protocol — journal · reading · skincare</div></div>
+      <div class="schedule-row"><div class="time-col">10:00</div><div class="block block-routine">Sleep</div></div>
+    </div>
+
+    <!-- Mission + Habits -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card">
+        <div class="section-label">Today's Mission</div>
+        <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Complete Khan Academy: Limits Intro (Unit 1.1)</div></div>
+        <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Build: scaffold project repo + set up voice API</div></div>
+        <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Spanish: vocab set 1 + grammar review Ch.1</div></div>
+        <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Log Day 1 journal entry (longer, Sunday format)</div></div>
+        <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Take Day 1 photo — accountability baseline</div></div>
+      </div>
+
+      <div class="card">
+        <div class="section-label">Monk Mode Protocol</div>
+        <div class="habit-row">
+          <div class="habit-name">Prayer (10–15 min)</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">Meditation (10 min)</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">Cold Shower</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">AM Skincare</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">No Sugar / No Junk</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">Journal Entry</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">PM Skincare</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+        <div class="habit-row">
+          <div class="habit-name">Sleep by 10pm</div>
+          <div class="habit-right"><div class="streak">0d</div><div class="checkbox"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACADEMICS + BUILD -->
+  <div class="two-col">
+    <div class="card">
+      <div class="section-label">Academics</div>
+      <div class="subject-row">
+        <div class="subject-header"><div class="subject-name">AP Calc AB</div><div class="subject-pct">Unit 1 / 8 · 0%</div></div>
+        <div class="prog-bar"><div class="prog-fill prog-blue" style="width:0%"></div></div>
+        <div class="task-item" style="margin-top:6px;"><div class="task-dot dot-blue"></div><div class="task-text">Today: Limits — Introduction (1.1)</div></div>
+      </div>
+      <div class="subject-row">
+        <div class="subject-header"><div class="subject-name">AP Physics 1</div><div class="subject-pct">Unit 1 / 8 · 0%</div></div>
+        <div class="prog-bar"><div class="prog-fill prog-blue" style="width:0%"></div></div>
+        <div class="task-item" style="margin-top:6px;"><div class="task-dot dot-blue"></div><div class="task-text">Today: Kinematics — Position & Velocity (1.1)</div></div>
+      </div>
+      <div class="subject-row">
+        <div class="subject-header"><div class="subject-name">Spanish 3</div><div class="subject-pct">Week 1 / 11 · 0%</div></div>
+        <div class="prog-bar"><div class="prog-fill prog-orange" style="width:0%"></div></div>
+        <div class="task-item" style="margin-top:6px;"><div class="task-dot dot-dim"></div><div class="task-text">Today: Vocab Set 1 + Presente de Indicativo</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Build — AI Teacher</div>
+      <div class="subject-header" style="margin-bottom:4px;">
+        <div class="subject-name">v1 Milestone</div>
+        <div class="subject-pct">0% · Ship by Aug 14</div>
+      </div>
+      <div class="prog-bar" style="margin-bottom:10px;"><div class="prog-fill prog-green" style="width:0%"></div></div>
+      <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Scaffold repo + tech stack decision</div></div>
+      <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Voice API research (ElevenLabs / Whisper)</div></div>
+      <div class="task-item"><div class="task-dot dot-dim"></div><div class="task-text">Avatar library research</div></div>
+      <div class="task-item" style="margin-top:6px; padding-top:6px; border-top:1px solid #0f0f0f;">
+        <div class="task-dot" style="background:#ff8800;"></div>
+        <div class="task-text" style="color:#ff880070;">Stretch: Demo to orphanage (India) / Sinha / Pratham</div>
+      </div>
+      <div style="margin-top:8px; color:#333; font-size:10px;">Young Longs class: Sunday 5:30–6:15pm · 2–3h hw/week</div>
+    </div>
+  </div>
+
+  <!-- GOAL CASCADE -->
+  <div class="card">
+    <div class="section-label">Goal Cascade — Why Today Matters</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+      <div>
+        <div class="goal-tier goal-summer">
+          <div class="goal-tier-label">Summer</div>
+          <div class="goal-text">Ship working v1 of AI Teacher (voice/avatar)</div>
+        </div>
+        <div class="goal-tier goal-week">
+          <div class="goal-tier-label">This week</div>
+          <div class="goal-text">Scaffold project, choose tech stack, first voice prototype</div>
+        </div>
+        <div class="goal-tier goal-today">
+          <div class="goal-tier-label">Today</div>
+          <div class="goal-text">Repo up, voice API researched, first commit</div>
+        </div>
+      </div>
+      <div>
+        <div class="goal-tier goal-summer">
+          <div class="goal-tier-label">Summer</div>
+          <div class="goal-text">Calc: Units 1–8 Proficient+. Physics: Units 1–8 Proficient+. Spanish: Conversational fluency.</div>
+        </div>
+        <div class="goal-tier goal-week">
+          <div class="goal-tier-label">This week</div>
+          <div class="goal-text">Calc Unit 1. Physics Unit 1. Spanish Week 1 vocab + grammar.</div>
+        </div>
+        <div class="goal-tier goal-today">
+          <div class="goal-tier-label">Today</div>
+          <div class="goal-text">1h Calc, 1h Physics, 1h Spanish — first sessions</div>
+        </div>
+      </div>
+      <div>
+        <div class="goal-tier goal-summer">
+          <div class="goal-tier-label">Summer</div>
+          <div class="goal-text">Become unrecognizable — body, mind, discipline, spirit</div>
+        </div>
+        <div class="goal-tier goal-week">
+          <div class="goal-tier-label">This week</div>
+          <div class="goal-text">Establish all habits from day 1. No exceptions. Build the streak.</div>
+        </div>
+        <div class="goal-tier goal-today">
+          <div class="goal-tier-label">Today</div>
+          <div class="goal-text">All 8 protocol items. Day 1 photo. First journal entry.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FITNESS + MIND -->
+  <div class="two-col">
+    <div class="card">
+      <div class="section-label">Fitness</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <div style="color:#ff8800;font-size:11px;">Today: GYM — Push Day</div>
+        <div style="color:#ff880060;font-size:10px;">0 / 50 sessions</div>
+      </div>
+      <div class="prog-bar" style="margin-bottom:10px;"><div class="prog-fill prog-orange" style="width:0%"></div></div>
+      <div class="task-item"><div class="task-dot" style="background:#ff8800;"></div><div class="task-text">Log today's workout (exercises, sets, reps)</div></div>
+      <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;">
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Mon GYM</span>
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Tue CARDIO</span>
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Wed GYM</span>
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Thu CARDIO</span>
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Fri GYM</span>
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Sat CARDIO</span>
+        <span style="background:#ff880015;border:1px solid #ff880030;color:#ff880080;padding:2px 8px;font-size:9px;border-radius:2px;">Sun REST</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Mind</div>
+      <div class="habit-row">
+        <div class="habit-name">Reading — Atomic Habits</div>
+        <div class="habit-right"><div class="streak" style="color:#0088ff70;">0 / ~280 pages</div><div class="checkbox"></div></div>
+      </div>
+      <div class="habit-row">
+        <div class="habit-name">Bible — Proverbs</div>
+        <div class="habit-right"><div class="streak" style="color:#0088ff70;">Ch. 0 / 31</div><div class="checkbox"></div></div>
+      </div>
+      <div class="habit-row">
+        <div class="habit-name">Weekly Video (speaking)</div>
+        <div class="habit-right"><div class="streak" style="color:#0088ff70;">0 / 10 videos</div><div class="checkbox"></div></div>
+      </div>
+      <div style="margin-top:10px;background:#0088ff08;border:1px solid #0088ff20;border-radius:3px;padding:8px;">
+        <div style="color:#0088ff70;font-size:9px;letter-spacing:1px;margin-bottom:4px;">JOURNAL PROMPT</div>
+        <div style="color:#555;font-size:10px;line-height:1.5;">Day 1. Who are you today, and who do you commit to becoming by August 17th? Be specific.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="card">
+    <div class="section-label">Stats &amp; Streaks — Last 4 Weeks</div>
+    <div style="display:grid;grid-template-columns:repeat(28,1fr);gap:2px;margin-bottom:4px;">
+      <!-- empty cells representing the past 4 weeks -->
+      <div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div>
+      <div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div>
+      <div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div>
+      <div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell"></div><div class="stats-cell high"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;color:#333;font-size:9px;letter-spacing:1px;margin-top:4px;">
+      <span>4 weeks ago</span>
+      <span>Today</span>
+    </div>
+  </div>
+
+  <div class="note">↑ scroll up to start your day &nbsp;·&nbsp; data saved locally in your browser</div>
+
+</div>
+</body>
+</html>

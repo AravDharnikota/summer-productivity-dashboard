@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme Options</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #111; color: #ccc; font-family: system-ui, -apple-system, sans-serif; padding: 24px; }
+h2 { color: #fff; font-size: 20px; margin-bottom: 6px; }
+.subtitle { color: #666; font-size: 13px; margin-bottom: 24px; }
+.themes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.theme-card {
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+.theme-card:hover { border-color: #ffffff40; }
+.theme-card.selected { border-color: #fff; }
+
+.theme-preview { padding: 20px; min-height: 220px; }
+.theme-label { padding: 14px 16px; }
+.theme-label h3 { font-size: 14px; margin-bottom: 4px; }
+.theme-label p { font-size: 12px; opacity: 0.6; line-height: 1.4; }
+
+/* THEME A — Clean Dark */
+.theme-a .theme-preview { background: #141414; }
+.theme-a .theme-label { background: #1c1c1c; color: #fff; }
+.ta-header { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -1px; margin-bottom: 4px; font-family: system-ui; }
+.ta-sub { font-size: 12px; color: #555; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+.ta-pills { display: flex; gap: 8px; margin-bottom: 16px; }
+.ta-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.ta-pill-green { background: #00ff8820; color: #00ff88; border: 1px solid #00ff8840; }
+.ta-pill-dim { background: #ffffff08; color: #444; border: 1px solid #ffffff10; }
+.ta-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e1e1e; }
+.ta-row:last-child { border: none; }
+.ta-name { color: #888; font-size: 13px; }
+.ta-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #2a2a2a; }
+.ta-check-done { background: #00ff8820; border-color: #00ff88; display: flex; align-items: center; justify-content: center; color: #00ff88; font-size: 11px; }
+.ta-bar { height: 4px; background: #1e1e1e; border-radius: 4px; margin-top: 10px; }
+.ta-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #00ff88, #00cc66); }
+
+/* THEME B — Minimal White on Black */
+.theme-b .theme-preview { background: #000; }
+.theme-b .theme-label { background: #0a0a0a; color: #fff; }
+.tb-eyebrow { font-size: 10px; letter-spacing: 3px; color: #333; text-transform: uppercase; margin-bottom: 8px; font-family: system-ui; }
+.tb-title { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -1.5px; margin-bottom: 16px; font-family: system-ui; }
+.tb-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.tb-stat { padding: 12px; border: 1px solid #1a1a1a; border-radius: 8px; }
+.tb-val { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 2px; font-family: system-ui; }
+.tb-lbl { font-size: 10px; color: #333; letter-spacing: 1px; text-transform: uppercase; }
+.tb-accent { color: #00ff88; }
+.tb-bar { height: 2px; background: #111; border-radius: 2px; margin-top: 14px; }
+.tb-fill { height: 100%; border-radius: 2px; background: #fff; width: 18%; }
+
+/* THEME C — Frosted / Glassmorphism Dark */
+.theme-c .theme-preview { background: linear-gradient(135deg, #0d0d1a 0%, #0a0a0a 100%); }
+.theme-c .theme-label { background: #111122; color: #fff; }
+.tc-header { color: #fff; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; font-family: system-ui; opacity: 0.4; }
+.tc-title { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -0.5px; margin-bottom: 14px; font-family: system-ui; }
+.tc-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tc-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 12px; backdrop-filter: blur(10px); }
+.tc-val { font-size: 24px; font-weight: 700; color: #fff; font-family: system-ui; }
+.tc-lbl { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; letter-spacing: 1px; text-transform: uppercase; }
+.tc-accent-green { color: #4ade80; }
+.tc-accent-blue { color: #60a5fa; }
+.tc-bar { height: 3px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-top: 8px; }
+.tc-fill-green { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #4ade80, #22c55e); width: 30%; }
+.tc-fill-blue { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #60a5fa, #3b82f6); width: 15%; }
+
+/* THEME D — Notion-style dark */
+.theme-d .theme-preview { background: #191919; }
+.theme-d .theme-label { background: #1f1f1f; color: #fff; }
+.td-breadcrumb { font-size: 11px; color: #444; margin-bottom: 12px; font-family: system-ui; }
+.td-title { font-size: 30px; font-weight: 700; color: #e3e3e3; letter-spacing: -1px; margin-bottom: 6px; font-family: system-ui; }
+.td-meta { font-size: 12px; color: #444; margin-bottom: 16px; font-family: system-ui; }
+.td-section { margin-bottom: 10px; }
+.td-section-label { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: system-ui; }
+.td-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-family: system-ui; }
+.td-box { width: 16px; height: 16px; border: 1.5px solid #333; border-radius: 3px; flex-shrink: 0; }
+.td-text { font-size: 13px; color: #888; }
+.td-tag { display: inline-block; background: #2a2a2a; color: #666; font-size: 10px; padding: 2px 8px; border-radius: 4px; margin-left: auto; font-family: system-ui; }
+</style>
+<script>
+function toggleSelect(el) {
+  document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (window.recordChoice) recordChoice(el.dataset.choice, el.querySelector('h3').textContent);
+}
+</script>
+</head>
+<body>
+<h2>Pick a new look</h2>
+<p class="subtitle">Same structure, different feel — which is easier on your eyes?</p>
+
+<div class="themes">
+
+  <!-- THEME A -->
+  <div class="theme-card theme-a" data-choice="a" onclick="toggleSelect(this)">
+    <div class="theme-preview">
+      <div class="ta-header">Day 1 / 77</div>
+      <div class="ta-sub">Friday · May 30 · Monk Mode Active</div>
+      <div class="ta-pills">
+        <div class="ta-pill ta-pill-green">0 day streak</div>
+        <div class="ta-pill ta-pill-dim">0% summer</div>
+        <div class="ta-pill ta-pill-dim">0 / 8 today</div>
+      </div>
+      <div class="ta-row">
+        <div class="ta-name">Prayer</div>
+        <div class="ta-check ta-check-done">✓</div>
+      </div>
+      <div class="ta-row">
+        <div class="ta-name">Meditation</div>
+        <div class="ta-check"></div>
+      </div>
+      <div class="ta-row">
+        <div class="ta-name">Cold Shower</div>
+        <div class="ta-check"></div>
+      </div>
+      <div class="ta-bar"><div class="ta-fill" style="width:12%"></div></div>
+    </div>
+    <div class="theme-label">
+      <h3>Clean Dark</h3>
+      <p>Dark gray background, crisp white text, green accents. Spacious, readable, modern. The terminal spirit without the harshness.</p>
+    </div>
+  </div>
+
+  <!-- THEME B -->
+  <div class="theme-card theme-b" data-choice="b" onclick="toggleSelect(this)">
+    <div class="theme-preview">
+      <div class="tb-eyebrow">Summer Lock-In · Day 1</div>
+      <div class="tb-title">May 30<span class="tb-accent">.</span></div>
+      <div class="tb-grid">
+        <div class="tb-stat">
+          <div class="tb-val tb-accent">0</div>
+          <div class="tb-lbl">Streak</div>
+        </div>
+        <div class="tb-stat">
+          <div class="tb-val">0%</div>
+          <div class="tb-lbl">Summer</div>
+        </div>
+        <div class="tb-stat">
+          <div class="tb-val">0/8</div>
+          <div class="tb-lbl">Done</div>
+        </div>
+      </div>
+      <div class="tb-bar"><div class="tb-fill"></div></div>
+    </div>
+    <div class="theme-label">
+      <h3>Pure Black / Editorial</h3>
+      <p>True black, stark white, one accent. Maximum contrast, zero clutter. Like a luxury app. Bold and confident.</p>
+    </div>
+  </div>
+
+  <!-- THEME C -->
+  <div class="theme-card theme-c" data-choice="c" onclick="toggleSelect(this)">
+    <div class="theme-preview">
+      <div class="tc-header">Summer Lock-In</div>
+      <div class="tc-title">Day 1 — May 30</div>
+      <div class="tc-cards">
+        <div class="tc-card">
+          <div class="tc-val tc-accent-green">0d</div>
+          <div class="tc-lbl">Streak</div>
+          <div class="tc-bar"><div class="tc-fill-green"></div></div>
+        </div>
+        <div class="tc-card">
+          <div class="tc-val tc-accent-blue">0%</div>
+          <div class="tc-lbl">Summer</div>
+          <div class="tc-bar"><div class="tc-fill-blue"></div></div>
+        </div>
+        <div class="tc-card">
+          <div class="tc-val">0/8</div>
+          <div class="tc-lbl">Habits</div>
+        </div>
+        <div class="tc-card">
+          <div class="tc-val">6h</div>
+          <div class="tc-lbl">Build</div>
+        </div>
+      </div>
+    </div>
+    <div class="theme-label">
+      <h3>Glass / Deep Space</h3>
+      <p>Near-black with subtle blue tint, frosted glass cards, soft green + blue accents. Premium, layered feel.</p>
+    </div>
+  </div>
+
+  <!-- THEME D -->
+  <div class="theme-card theme-d" data-choice="d" onclick="toggleSelect(this)">
+    <div class="theme-preview">
+      <div class="td-breadcrumb">Summer Lock-In / Today</div>
+      <div class="td-title">Day 1</div>
+      <div class="td-meta">Friday, May 30 · Monk Mode · Week 1 of 11</div>
+      <div class="td-section">
+        <div class="td-section-label">Protocol</div>
+        <div class="td-item"><div class="td-box"></div><div class="td-text">Prayer</div><div class="td-tag">morning</div></div>
+        <div class="td-item"><div class="td-box"></div><div class="td-text">Meditation</div><div class="td-tag">morning</div></div>
+        <div class="td-item"><div class="td-box"></div><div class="td-text">Cold Shower</div><div class="td-tag">morning</div></div>
+      </div>
+    </div>
+    <div class="theme-label">
+      <h3>Notion-style Dark</h3>
+      <p>Familiar document-style layout, soft dark grays, clean typography. Feels like a professional workspace you live in.</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
