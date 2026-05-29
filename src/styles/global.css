@@ -1,0 +1,41 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #0a0a0a;
+  --bg-sidebar:   #0d0d0d;
+  --bg-card:      #111111;
+  --bg-hover:     #161616;
+  --border:       #1f1f1f;
+  --border-light: #1a1a1a;
+  --text:         #e8e8e8;
+  --text-muted:   #555555;
+  --text-dim:     #3f3f3f;
+  --green:        #22c55e;
+  --green-bg:     #0f1f0f;
+  --green-border: #166534;
+  --green-dim:    #0c1a0c;
+  --blue:         #3b82f6;
+  --blue-bg:      #0f172a;
+  --orange:       #fb923c;
+  --orange-bg:    #1c1000;
+  --purple:       #a855f7;
+  --teal:         #14b8a6;
+  --red:          #ef4444;
+  --red-bg:       #160a0a;
+  --indigo:       #818cf8;
+  --indigo-bg:    #0d0d2a;
+  --indigo-border:#3b4fd8;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+button { cursor: pointer; border: none; background: none; font: inherit; }
+input, textarea { font: inherit; }
+a { color: inherit; text-decoration: none; }
