@@ -1,0 +1,26 @@
+.today-page { display: flex; flex-direction: column; gap: 0; }
+
+/* Week pills */
+.week-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.week-pill { font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 500; border: 1px solid; }
+.week-pill.gym     { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+.week-pill.cardio  { background: var(--blue-bg);  color: var(--blue);  border-color: #1e3a5f; }
+.week-pill.rest    { background: #141414; color: var(--text-dim); border-color: var(--border); }
+.week-pill.current { box-shadow: 0 0 0 1px currentColor; font-weight: 700; }
+
+/* Goal cascade */
+.goal-cascade-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.gc-col-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border-light); }
+.gc-col-label.build    { color: var(--green); }
+.gc-col-label.academics { color: var(--blue); }
+.gc-col-label.personal  { color: var(--purple); }
+.gc-block { padding: 9px 11px; border-radius: 8px; font-size: 12px; line-height: 1.5; margin-bottom: 6px; }
+.gc-block.summer { background: #0a1a0a; border: 1px solid #1a3a1a; color: #555; }
+.gc-block.week   { background: #0a0f1a; border: 1px solid #1a2a3a; color: #555; }
+.gc-block.today  { background: #0c0c0c; border: 1px solid var(--border); color: #444; }
+.gc-tier { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 3px; color: var(--text-dim); }
+
+/* Journal box */
+.journal-box { background: var(--blue-bg); border: 1px solid #1e3a5f; border-radius: 8px; padding: 12px 14px; margin-top: 12px; }
+.journal-box-label { font-size: 9px; color: #3b82f680; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+.journal-box-text { font-size: 12px; color: #475569; line-height: 1.6; font-style: italic; }
