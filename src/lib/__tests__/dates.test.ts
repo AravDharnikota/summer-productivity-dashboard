@@ -4,7 +4,6 @@ import {
   isOffDay,
   getHackathon,
   getGymType,
-  formatDate,
   getWeekNumber,
 } from '../dates'
 

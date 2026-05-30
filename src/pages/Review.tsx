@@ -14,9 +14,6 @@ const QUESTIONS: { field: keyof Omit<WeeklyReview, 'weekNumber' | 'habitPct' | '
   { field: 'gutCheck',       label: 'How am I feeling — honest gut check.',                        placeholder: 'Energy, confidence, clarity, doubt…' },
 ]
 
-function weekLabel(n: number) {
-  return n <= TOTAL_WEEKS ? `Week ${n}` : null
-}
 
 export default function Review() {
   const { state, dispatch } = useApp()
@@ -26,7 +23,7 @@ export default function Review() {
   const [viewingWeek, setViewingWeek] = useState(Math.min(currentWeek, TOTAL_WEEKS))
   const [expandedArchive, setExpandedArchive] = useState<number | null>(null)
 
-  const { start, end, label: rangeLabel } = getWeekRange(viewingWeek)
+  const { start, label: rangeLabel } = getWeekRange(viewingWeek)
   const habitPct = getWeekHabitPct(state.logs, viewingWeek)
   const saved = state.weeklyReviews?.[viewingWeek]
 

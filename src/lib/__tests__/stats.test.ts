@@ -18,6 +18,8 @@ function makeLog(date: string, habits: DayLog['habits']): DayLog {
     workoutLogged: false, workoutNotes: '',
     journalEntry: '', proteinTarget: false,
     readingPages: 0, bibleChapter: false, speakingVideo: false,
+    proteinGrams: 0, waterBottles: 0, buildHours: 0, pushups: 0,
+    checkinWorkBlocks: '', checkinBuilt: '', checkinBlockers: '', checkinTomorrow: '',
   }
 }
 

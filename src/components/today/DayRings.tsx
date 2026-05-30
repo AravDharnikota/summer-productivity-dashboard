@@ -65,7 +65,7 @@ function Clicker({ value, onMinus, onPlus, unit = '', step }: ClickerProps) {
 }
 
 
-function NumberInput({ value, onSet, placeholder, unit }: { value: number; onSet: (n: number) => void; placeholder: string; unit?: string }) {
+function NumberInput({ onSet, placeholder }: { value: number; onSet: (n: number) => void; placeholder: string; unit?: string }) {
   const [val, setVal] = useState('')
   function submit() {
     const n = parseInt(val, 10)

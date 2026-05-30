@@ -17,7 +17,7 @@ export default function HabitHeatmap() {
   const today = todayString()
 
   // Week labels: day 1, 8, 15, 22, 29, 36, 43, 50, 57, 64, 71
-  const weekLabels = ALL_DAYS.map((d, i) => (i % 7 === 0 ? String(i + 1) : ''))
+  const weekLabels = ALL_DAYS.map((_, i) => (i % 7 === 0 ? String(i + 1) : ''))
 
   return (
     <div className="card gap-bottom">
