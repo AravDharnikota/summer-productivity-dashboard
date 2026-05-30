@@ -49,8 +49,10 @@ export default function ScheduleTimeline({ date }: { date: string }) {
   const [edit, setEdit] = useState<EditState | null>(null)
   const [currentMin, setCurrentMin] = useState(nowMinutes())
   const [draftBlocks, setDraftBlocks] = useState<ScheduleBlock[] | null>(null)
+  const draftRef = useRef<ScheduleBlock[] | null>(null)
   const dragRef = useRef<DragState | null>(null)
   const mouseDownY = useRef(0)
+  const wasDragRef = useRef(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const displaySchedule: ScheduleBlock[] = draftBlocks ?? schedule
   const liveScheduleRef = useRef<ScheduleBlock[]>(schedule)
@@ -104,13 +106,15 @@ export default function ScheduleTimeline({ date }: { date: string }) {
       if (b.id !== drag.blockId) return b
       if (drag.mode === 'move') {
         const dur = drag.origEndMin - drag.origStartMin
-        const newStart = Math.max(DAY_START, Math.min(DAY_END - dur, drag.origStartMin + deltaMin))
+        const rawStart = Math.max(DAY_START, Math.min(DAY_END - dur, drag.origStartMin + rawDelta))
+        const newStart = snapMin(rawStart)
         return { ...b, startTime: minToHHMM(newStart), endTime: minToHHMM(newStart + dur) }
       } else {
         const newEnd = Math.max(drag.origStartMin + SNAP, Math.min(DAY_END, drag.origEndMin + deltaMin))
         return { ...b, endTime: minToHHMM(snapMin(newEnd)) }
       }
     })
+    draftRef.current = updated
     setDraftBlocks(updated)
   }
 
@@ -118,6 +122,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
     const drag = dragRef.current
     if (!drag) return
     const moved = Math.abs(e.clientY - mouseDownY.current)
+    wasDragRef.current = moved >= DRAG_THRESHOLD
     if (moved < DRAG_THRESHOLD) {
       const block = liveScheduleRef.current.find(b => b.id === drag.blockId)
       if (block) {
@@ -125,13 +130,15 @@ export default function ScheduleTimeline({ date }: { date: string }) {
       }
     }
     dragRef.current = null
-    if (draftBlocks) {
-      save(draftBlocks)
+    if (draftRef.current) {
+      save(draftRef.current)
+      draftRef.current = null
       setDraftBlocks(null)
     }
   }
 
   function onTimelineClick(e: React.MouseEvent) {
+    if (wasDragRef.current) { wasDragRef.current = false; return }
     if (!timelineRef.current) return
     const rect = timelineRef.current.getBoundingClientRect()
     const y = e.clientY - rect.top
