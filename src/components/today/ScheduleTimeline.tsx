@@ -48,9 +48,11 @@ export default function ScheduleTimeline({ date }: { date: string }) {
 
   const [edit, setEdit] = useState<EditState | null>(null)
   const [currentMin, setCurrentMin] = useState(nowMinutes())
+  const [draftBlocks, setDraftBlocks] = useState<ScheduleBlock[] | null>(null)
   const dragRef = useRef<DragState | null>(null)
   const mouseDownY = useRef(0)
   const timelineRef = useRef<HTMLDivElement>(null)
+  const displaySchedule: ScheduleBlock[] = draftBlocks ?? schedule
   const liveScheduleRef = useRef<ScheduleBlock[]>(schedule)
   liveScheduleRef.current = schedule
 
@@ -79,6 +81,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
   }
 
   function onBlockMouseDown(e: React.MouseEvent, block: ScheduleBlock, mode: 'move' | 'resize') {
+    if (e.button !== 0) return
     e.stopPropagation()
     e.preventDefault()
     mouseDownY.current = e.clientY
@@ -95,21 +98,20 @@ export default function ScheduleTimeline({ date }: { date: string }) {
     const drag = dragRef.current
     if (!drag) return
     const rawDelta = e.clientY - drag.startY
-    const deltaMin = snapMin(Math.round(rawDelta / PX_PER_MIN))
+    const deltaMin = snapMin(rawDelta)
     const sched = liveScheduleRef.current
     const updated = sched.map(b => {
       if (b.id !== drag.blockId) return b
       if (drag.mode === 'move') {
         const dur = drag.origEndMin - drag.origStartMin
         const newStart = Math.max(DAY_START, Math.min(DAY_END - dur, drag.origStartMin + deltaMin))
-        const snapped = snapMin(newStart)
-        return { ...b, startTime: minToHHMM(snapped), endTime: minToHHMM(snapped + dur) }
+        return { ...b, startTime: minToHHMM(newStart), endTime: minToHHMM(newStart + dur) }
       } else {
         const newEnd = Math.max(drag.origStartMin + SNAP, Math.min(DAY_END, drag.origEndMin + deltaMin))
         return { ...b, endTime: minToHHMM(snapMin(newEnd)) }
       }
     })
-    dispatch({ type: 'SET_SCHEDULE', date, blocks: updated })
+    setDraftBlocks(updated)
   }
 
   function onMouseUp(e: React.MouseEvent) {
@@ -123,10 +125,13 @@ export default function ScheduleTimeline({ date }: { date: string }) {
       }
     }
     dragRef.current = null
+    if (draftBlocks) {
+      save(draftBlocks)
+      setDraftBlocks(null)
+    }
   }
 
   function onTimelineClick(e: React.MouseEvent) {
-    if (dragRef.current) return
     if (!timelineRef.current) return
     const rect = timelineRef.current.getBoundingClientRect()
     const y = e.clientY - rect.top
@@ -193,7 +198,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
           ))}
 
           <div className="tl-blocks">
-            {schedule.map(block => (
+            {displaySchedule.map(block => (
               <div
                 key={block.id}
                 className="tl-block"
