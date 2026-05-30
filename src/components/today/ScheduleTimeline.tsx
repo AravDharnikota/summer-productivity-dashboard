@@ -216,6 +216,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
                   background: `${TYPE_COLORS[block.type]}22`,
                 }}
                 onMouseDown={e => onBlockMouseDown(e, block, 'move')}
+                onClick={e => e.stopPropagation()}
               >
                 <div className="tl-block-label">{block.label}</div>
                 {blockHeight(block) >= 28 && (
