@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom'
 import CalendarGrid from '../components/calendar/CalendarGrid'
 
 export default function Calendar() {
+  const navigate = useNavigate()
+
   return (
     <div className="card">
       <div className="card-title">Summer Lock-In Calendar</div>
-      <div className="card-sub">May 30 → Aug 14, 2026 · 77 days</div>
+      <div className="card-sub">May 30 → Aug 14, 2026 · 77 days · Click any day to open its full page</div>
 
       <div className="cal-legend">
         <span>
@@ -20,10 +23,10 @@ export default function Calendar() {
         </span>
       </div>
 
-      <CalendarGrid year={2026} month={4} />
-      <CalendarGrid year={2026} month={5} />
-      <CalendarGrid year={2026} month={6} />
-      <CalendarGrid year={2026} month={7} />
+      <CalendarGrid year={2026} month={4} onDayClick={d => navigate(`/day/${d}`)} />
+      <CalendarGrid year={2026} month={5} onDayClick={d => navigate(`/day/${d}`)} />
+      <CalendarGrid year={2026} month={6} onDayClick={d => navigate(`/day/${d}`)} />
+      <CalendarGrid year={2026} month={7} onDayClick={d => navigate(`/day/${d}`)} />
     </div>
   )
 }

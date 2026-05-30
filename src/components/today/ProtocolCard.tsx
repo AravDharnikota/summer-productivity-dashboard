@@ -1,13 +1,15 @@
 import { useApp } from '../../context/AppContext'
-import { todayString } from '../../lib/dates'
+import { getGymType } from '../../lib/dates'
 import { HABITS } from '../../lib/constants'
 import type { HabitId } from '../../types'
 
-export default function ProtocolCard() {
+export default function ProtocolCard({ date }: { date: string }) {
   const { state, dispatch } = useApp()
-  const today = todayString()
+  const today = date
   const log = state.logs[today]
   const habits = log?.habits ?? {}
+  const gymType = getGymType(today)
+  const gymLabel = gymType === 'GYM' ? 'Gym — Push/Pull/Legs' : gymType === 'CARDIO' ? 'Cardio — Run / Bike' : null
 
   function habitStreak(habitId: HabitId): number {
     let streak = 0
@@ -52,6 +54,39 @@ export default function ProtocolCard() {
           </div>
         )
       })}
+      <div className="habit-row">
+        <div className="habit-left">
+          <div className="habit-icon">💪</div>
+          <div>
+            <div className="habit-name">50 Push-ups</div>
+            <div className="habit-freq">daily · log your max set</div>
+          </div>
+        </div>
+        <div className="habit-right">
+          <span className={`streak-badge ${(log?.pushups ?? 0) >= 50 ? 'active' : 'zero'}`}>
+            {log?.pushups ?? 0}
+          </span>
+        </div>
+      </div>
+      {gymLabel && (
+        <div className="habit-row">
+          <div className="habit-left">
+            <div className="habit-icon">🏋️</div>
+            <div>
+              <div className="habit-name">{gymLabel}</div>
+              <div className="habit-freq">log session · no log = didn't happen</div>
+            </div>
+          </div>
+          <div className="habit-right">
+            <div
+              className={`cb ${log?.workoutLogged ? 'done' : ''}`}
+              onClick={() => dispatch({ type: 'SET_WORKOUT', date: today, logged: !log?.workoutLogged, notes: log?.workoutNotes ?? '' })}
+            >
+              {log?.workoutLogged ? '✓' : ''}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

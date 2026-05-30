@@ -1,5 +1,5 @@
 import { useApp } from '../../context/AppContext'
-import { todayString, getWeekNumber } from '../../lib/dates'
+import { getWeekNumber } from '../../lib/dates'
 
 const DEFAULT_GOALS = {
   build: {
@@ -19,10 +19,9 @@ const DEFAULT_GOALS = {
   },
 }
 
-export default function GoalCascade() {
+export default function GoalCascade({ date }: { date: string }) {
   const { state } = useApp()
-  const today = todayString()
-  const weekNum = getWeekNumber(today) ?? 1
+  const weekNum = getWeekNumber(date) ?? 1
   const weekGoals = state.weekGoals[weekNum]
 
   const cols = [

@@ -1,10 +1,10 @@
 import { useApp } from '../../context/AppContext'
-import { todayString, getDayNumber } from '../../lib/dates'
+import { getDayNumber } from '../../lib/dates'
 import { getStreak, getSummerProgress, getHabitsCompletedToday } from '../../lib/stats'
 
-export default function StatRow() {
+export default function StatRow({ date }: { date: string }) {
   const { state } = useApp()
-  const today = todayString()
+  const today = date
   const streak = getStreak(state.logs, today)
   const progress = getSummerProgress(today)
   const habitsToday = getHabitsCompletedToday(state.logs[today])

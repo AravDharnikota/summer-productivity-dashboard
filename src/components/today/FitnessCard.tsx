@@ -1,13 +1,13 @@
 import { useApp } from '../../context/AppContext'
-import { todayString, getGymType } from '../../lib/dates'
+import { getGymType } from '../../lib/dates'
 import { getTotalGymSessions } from '../../lib/stats'
 
 const WEEK_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const GYM_WEEK  = ['REST', 'GYM', 'CARDIO', 'GYM', 'CARDIO', 'GYM', 'CARDIO'] as const
 
-export default function FitnessCard() {
+export default function FitnessCard({ date }: { date: string }) {
   const { state, dispatch } = useApp()
-  const today = todayString()
+  const today = date
   const log = state.logs[today]
   const gymType = getGymType(today)
   const sessions = getTotalGymSessions(state.logs)

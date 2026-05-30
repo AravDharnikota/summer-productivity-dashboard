@@ -124,6 +124,54 @@ function reducer(state: AppState, action: AppAction): AppState {
         weekGoals: { ...state.weekGoals, [action.weekNumber]: action.goals },
       }
     }
+    case 'TOGGLE_CALC_UNIT': {
+      const units = [...(state.calcUnits ?? Array(8).fill(false))]
+      units[action.unit] = !units[action.unit]
+      return { ...state, calcUnits: units }
+    }
+    case 'TOGGLE_PHYSICS_UNIT': {
+      const units = [...(state.physicsUnits ?? Array(8).fill(false))]
+      units[action.unit] = !units[action.unit]
+      return { ...state, physicsUnits: units }
+    }
+    case 'SET_WATER_BOTTLES': {
+      const log = getOrCreateLog(state, action.date)
+      return { ...state, logs: { ...state.logs, [action.date]: { ...log, waterBottles: Math.max(0, action.count) } } }
+    }
+    case 'SET_BUILD_HOURS': {
+      const log = getOrCreateLog(state, action.date)
+      return { ...state, logs: { ...state.logs, [action.date]: { ...log, buildHours: Math.max(0, action.hours) } } }
+    }
+    case 'SET_PROTEIN_GRAMS': {
+      const log = getOrCreateLog(state, action.date)
+      return { ...state, logs: { ...state.logs, [action.date]: { ...log, proteinGrams: Math.max(0, action.grams) } } }
+    }
+    case 'SET_PUSHUPS': {
+      const log = getOrCreateLog(state, action.date)
+      return { ...state, logs: { ...state.logs, [action.date]: { ...log, pushups: Math.max(0, action.count) } } }
+    }
+    case 'SET_SCHEDULE': {
+      const cs = { ...(state.customSchedules ?? {}), [action.date]: action.blocks }
+      return { ...state, customSchedules: cs }
+    }
+    case 'RESET_SCHEDULE': {
+      const cs = { ...(state.customSchedules ?? {}) }
+      delete cs[action.date]
+      return { ...state, customSchedules: cs }
+    }
+    case 'SET_CHECKIN': {
+      const log = getOrCreateLog(state, action.date)
+      const fieldMap = {
+        workBlocks: 'checkinWorkBlocks',
+        built:      'checkinBuilt',
+        blockers:   'checkinBlockers',
+        tomorrow:   'checkinTomorrow',
+      } as const
+      return { ...state, logs: { ...state.logs, [action.date]: { ...log, [fieldMap[action.field]]: action.value } } }
+    }
+    case 'SAVE_WEEKLY_REVIEW': {
+      return { ...state, weeklyReviews: { ...(state.weeklyReviews ?? {}), [action.review.weekNumber]: action.review } }
+    }
     default:
       return state
   }

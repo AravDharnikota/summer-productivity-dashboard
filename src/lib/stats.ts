@@ -1,6 +1,24 @@
-import { getDayNumber } from './dates'
-import { START_DATE, TOTAL_DAYS } from './constants'
+import { getDayNumber, getDatesInRange } from './dates'
+import { START_DATE, END_DATE, TOTAL_DAYS } from './constants'
 import type { DayLog } from '../types'
+
+export function getWeekRange(weekNumber: number): { start: string; end: string; label: string } {
+  const all = getDatesInRange(START_DATE, END_DATE)
+  const s = (weekNumber - 1) * 7
+  const start = all[s]
+  const end = all[Math.min(s + 6, all.length - 1)]
+  const fmt = (d: string) => new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return { start, end, label: `${fmt(start)} – ${fmt(end)}` }
+}
+
+export function getWeekHabitPct(logs: Record<string, DayLog>, weekNumber: number): number {
+  const { start, end } = getWeekRange(weekNumber)
+  const days = getDatesInRange(start, end)
+  const logged = days.filter(d => logs[d])
+  if (logged.length === 0) return 0
+  const total = logged.reduce((s, d) => s + getHabitCompletionRate(logs[d].habits), 0)
+  return Math.round((total / logged.length) * 100)
+}
 
 export function getHabitCompletionRate(habits: DayLog['habits']): number {
   const vals = Object.values(habits)

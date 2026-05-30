@@ -1,11 +1,11 @@
 import { useApp } from '../../context/AppContext'
-import { todayString, getDayNumber } from '../../lib/dates'
+import { getDayNumber } from '../../lib/dates'
 import { getTotalBibleChapters, getTotalReadingPages } from '../../lib/stats'
 import { JOURNAL_PROMPTS, DEFAULT_JOURNAL_PROMPT } from '../../lib/constants'
 
-export default function MindCard() {
+export default function MindCard({ date }: { date: string }) {
   const { state, dispatch } = useApp()
-  const today = todayString()
+  const today = date
   const log = state.logs[today]
   const dayNum = getDayNumber(today) ?? 1
   const bibleChapters = getTotalBibleChapters(state.logs)

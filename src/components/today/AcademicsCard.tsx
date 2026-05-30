@@ -1,4 +1,4 @@
-import { getDayNumber, todayString } from '../../lib/dates'
+import { getDayNumber } from '../../lib/dates'
 
 const SUBJECTS = [
   { name: 'AP Calculus AB', color: 'blue' as const, totalDays: 55, defaultToday: 'Limits: An Intuitive Approach (Unit 1.1)' },
@@ -6,9 +6,8 @@ const SUBJECTS = [
   { name: 'Spanish 3',      color: 'orange' as const, totalDays: 55, defaultToday: 'Vocab Set 1 · Presente de Indicativo' },
 ]
 
-export default function AcademicsCard() {
-  const today = todayString()
-  const dayNum = (getDayNumber(today) ?? 1) - 1
+export default function AcademicsCard({ date }: { date: string }) {
+  const dayNum = (getDayNumber(date) ?? 1) - 1
 
   return (
     <div className="card">

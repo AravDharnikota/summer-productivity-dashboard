@@ -18,9 +18,17 @@ export function defaultDayLog(date: string): DayLog {
     workoutNotes: '',
     journalEntry: '',
     proteinTarget: false,
+    proteinGrams: 0,
     readingPages: 0,
     bibleChapter: false,
     speakingVideo: false,
+    waterBottles: 0,
+    buildHours: 0,
+    pushups: 0,
+    checkinWorkBlocks: '',
+    checkinBuilt: '',
+    checkinBlockers: '',
+    checkinTomorrow: '',
   }
 }
 
@@ -29,5 +37,9 @@ export function defaultAppState(): AppState {
     today: todayString(),
     logs: {},
     weekGoals: {},
+    calcUnits: Array(8).fill(false),
+    physicsUnits: Array(8).fill(false),
+    customSchedules: {},
+    weeklyReviews: {},
   }
 }

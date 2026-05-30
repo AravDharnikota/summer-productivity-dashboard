@@ -4,11 +4,12 @@ import { START_DATE, END_DATE } from '../../lib/constants'
 interface Props {
   year: number
   month: number   // 0-indexed (0=Jan, 4=May, 5=Jun, etc.)
+  onDayClick?: (dateStr: string) => void
 }
 
 function pad2(n: number) { return String(n).padStart(2, '0') }
 
-export default function CalendarGrid({ year, month }: Props) {
+export default function CalendarGrid({ year, month, onDayClick }: Props) {
   const firstDow = new Date(year, month, 1).getDay()       // 0=Sun
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   const monthName = new Date(year, month, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' })
@@ -45,8 +46,11 @@ export default function CalendarGrid({ year, month }: Props) {
           else if (off) cls += ' off'
           else if (!inRange) cls += ' outside'
 
+          const clickable = inRange && onDayClick
+          if (clickable) cls += ' clickable'
+
           return (
-            <div key={i} className={cls}>
+            <div key={i} className={cls} onClick={clickable ? () => onDayClick(dateStr) : undefined}>
               <div className="cal-num">{day}</div>
               {isStart && <div className="cal-tag">Day 1 🚀</div>}
               {isEnd   && <div className="cal-tag">Day 77 🏁</div>}

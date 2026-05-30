@@ -1,10 +1,9 @@
 import { useState, KeyboardEvent } from 'react'
 import { useApp } from '../../context/AppContext'
-import { todayString } from '../../lib/dates'
 
-export default function MissionCard() {
+export default function MissionCard({ date }: { date: string }) {
   const { state, dispatch } = useApp()
-  const today = todayString()
+  const today = date
   const log = state.logs[today]
   const tasks = log?.mission ?? []
   const [input, setInput] = useState('')

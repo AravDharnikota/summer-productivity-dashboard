@@ -1,11 +1,11 @@
 import { useState, KeyboardEvent } from 'react'
 import { useApp } from '../../context/AppContext'
-import { todayString, getDayNumber } from '../../lib/dates'
+import { getDayNumber } from '../../lib/dates'
 import { TOTAL_DAYS } from '../../lib/constants'
 
-export default function BuildCard() {
+export default function BuildCard({ date }: { date: string }) {
   const { state, dispatch } = useApp()
-  const today = todayString()
+  const today = date
   const log = state.logs[today]
   const tasks = log?.buildTasks ?? []
   const [input, setInput] = useState('')
