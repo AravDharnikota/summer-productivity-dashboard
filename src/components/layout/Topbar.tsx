@@ -25,6 +25,7 @@ export default function Topbar() {
         {hackathon && <div className="hack-badge">🚀 {hackathon}</div>}
         {off && !hackathon && <div className="off-badge">🌅 Off Day</div>}
         {!off && !hackathon && dayNum && <div className="monk-badge">⚡ Monk Mode</div>}
+        {!dayNum && !hackathon && <div className="day-chip">🔒 Lock-In starts tomorrow</div>}
       </div>
     </div>
   )

@@ -28,14 +28,14 @@ export const HACKATHONS: Hackathon[] = [
 ]
 
 export const HABITS: Habit[] = [
-  { id: 'prayer',     label: 'Prayer (10–15 min)',        freq: 'every day',                 icon: '🙏' },
-  { id: 'meditation', label: 'Meditation (10 min)',        freq: 'every day',                 icon: '🧘' },
-  { id: 'coldShower', label: 'Cold Shower',                freq: 'every day',                 icon: '🚿' },
-  { id: 'amSkincare', label: 'AM Skincare',                freq: 'every day',                 icon: '✨' },
-  { id: 'noSugar',    label: 'No Sugar / No Junk',         freq: 'every day · 120g+ protein', icon: '🥗' },
-  { id: 'journal',    label: 'Journal',                    freq: 'every night',               icon: '📓' },
-  { id: 'pmSkincare', label: 'PM Skincare',                freq: 'every day',                 icon: '🌙' },
-  { id: 'sleep10pm',  label: 'Sleep by 10pm',              freq: 'every day',                 icon: '😴' },
+  { id: 'prayer', label: 'Prayer (10–15 min)', freq: 'every day', icon: '🙏' },
+  { id: 'meditation', label: 'Meditation (10 min)', freq: 'every day', icon: '🧘' },
+  { id: 'coldShower', label: 'Cold Shower', freq: 'every day', icon: '🚿' },
+  { id: 'amSkincare', label: 'AM Skincare', freq: 'every day', icon: '✨' },
+  { id: 'noSugar', label: 'No Sugar / No Junk', freq: 'every day · 120g+ protein', icon: '🥗' },
+  { id: 'journal', label: 'Journal', freq: 'every night', icon: '📓' },
+  { id: 'pmSkincare', label: 'PM Skincare', freq: 'every day', icon: '🌙' },
+  { id: 'sleep10pm', label: 'Sleep by 10pm', freq: 'every day', icon: '😴' },
 ]
 
 export const GYM_SCHEDULE: Record<number, 'GYM' | 'CARDIO' | 'REST'> = {

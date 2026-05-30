@@ -41,7 +41,8 @@ export function getWeekNumber(dateStr: string): number | null {
 }
 
 export function todayString(): string {
-  return new Date().toISOString().split('T')[0]
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
 export function isSunday(dateStr: string): boolean {
@@ -53,7 +54,7 @@ export function getDatesInRange(start: string, end: string): string[] {
   const cur = toDate(start)
   const last = toDate(end)
   while (cur <= last) {
-    dates.push(cur.toISOString().split('T')[0])
+    dates.push(`${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, '0')}-${String(cur.getDate()).padStart(2, '0')}`)
     cur.setDate(cur.getDate() + 1)
   }
   return dates
