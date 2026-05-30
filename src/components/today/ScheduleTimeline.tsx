@@ -73,7 +73,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
   }
 
   const hours: { label: string; top: number }[] = []
-  for (let h = 6; h <= 22; h++) {
+  for (let h = 6; h <= 23; h++) {
     const label = h === 12 ? '12pm' : h < 12 ? `${h}am` : `${h - 12}pm`
     hours.push({ label, top: (h * 60 - DAY_START) * PX_PER_MIN })
   }
