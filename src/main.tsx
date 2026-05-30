@@ -7,6 +7,8 @@ import './styles/global.css'
 import './styles/layout.css'
 import './styles/components.css'
 import './styles/today.css'
+import './styles/overview.css'
+import './styles/calendar.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
