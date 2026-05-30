@@ -1,33 +1,24 @@
-import StatRow from '../components/today/StatRow'
-import ScheduleCard from '../components/today/ScheduleCard'
+import { todayString } from '../lib/dates'
+import DayRings from '../components/today/DayRings'
+import ScheduleTimeline from '../components/today/ScheduleTimeline'
 import MissionCard from '../components/today/MissionCard'
 import ProtocolCard from '../components/today/ProtocolCard'
-import AcademicsCard from '../components/today/AcademicsCard'
-import BuildCard from '../components/today/BuildCard'
-import GoalCascade from '../components/today/GoalCascade'
-import FitnessCard from '../components/today/FitnessCard'
-import MindCard from '../components/today/MindCard'
+import NightCheckin from '../components/today/NightCheckin'
 
-export default function Today() {
+interface Props { date?: string }
+
+export default function Today({ date = todayString() }: Props) {
   return (
     <div className="today-page">
-      <StatRow />
+      <DayRings date={date} />
       <div className="two-col gap-bottom">
-        <ScheduleCard />
+        <ScheduleTimeline date={date} />
         <div className="stack">
-          <MissionCard />
-          <ProtocolCard />
+          <MissionCard date={date} />
+          <ProtocolCard date={date} />
         </div>
       </div>
-      <div className="two-col gap-bottom">
-        <AcademicsCard />
-        <BuildCard />
-      </div>
-      <GoalCascade />
-      <div className="two-col gap-bottom">
-        <FitnessCard />
-        <MindCard />
-      </div>
+      <NightCheckin date={date} />
     </div>
   )
 }
