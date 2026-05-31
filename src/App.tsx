@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/layout/Sidebar'
 import Topbar from './components/layout/Topbar'
@@ -8,11 +9,13 @@ import DayPage from './pages/DayPage'
 import Review from './pages/Review'
 
 export default function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
   return (
     <div className="app">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="main">
-        <Topbar />
+        <Topbar onMenuClick={() => setSidebarOpen(o => !o)} />
         <div className="content">
           <Routes>
             <Route path="/" element={<Today />} />

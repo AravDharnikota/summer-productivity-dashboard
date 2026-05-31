@@ -8,7 +8,11 @@ const PAGE_TITLES: Record<string, string> = {
   '/review': 'Weekly Review',
 }
 
-export default function Topbar() {
+interface Props {
+  onMenuClick: () => void
+}
+
+export default function Topbar({ onMenuClick }: Props) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const today = todayString()
@@ -21,7 +25,10 @@ export default function Topbar() {
 
   return (
     <div className="topbar">
-      <div className="topbar-title">{pageTitle}</div>
+      <div className="topbar-left">
+        <button className="hamburger-btn" onClick={onMenuClick} aria-label="Open menu">☰</button>
+        <div className="topbar-title">{pageTitle}</div>
+      </div>
       <div className="topbar-right">
         <div
           className="day-chip"
