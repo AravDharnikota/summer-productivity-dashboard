@@ -52,6 +52,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
   const draftRef = useRef<ScheduleBlock[] | null>(null)
   const dragRef = useRef<DragState | null>(null)
   const mouseDownY = useRef(0)
+  const lastTouchY = useRef(0)
   const wasDragRef = useRef(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const displaySchedule: ScheduleBlock[] = draftBlocks ?? schedule
@@ -194,6 +195,14 @@ export default function ScheduleTimeline({ date }: { date: string }) {
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseUp}
+          onTouchMove={e => {
+            const touch = e.touches[0]
+            lastTouchY.current = touch.clientY
+            onMouseMove({ clientY: touch.clientY } as React.MouseEvent)
+          }}
+          onTouchEnd={() => {
+            onMouseUp({ clientY: lastTouchY.current } as React.MouseEvent)
+          }}
           onClick={onTimelineClick}
           ref={timelineRef}
         >
@@ -216,6 +225,19 @@ export default function ScheduleTimeline({ date }: { date: string }) {
                   background: `${TYPE_COLORS[block.type]}22`,
                 }}
                 onMouseDown={e => onBlockMouseDown(e, block, 'move')}
+                onTouchStart={e => {
+                  e.stopPropagation()
+                  const touch = e.touches[0]
+                  mouseDownY.current = touch.clientY
+                  lastTouchY.current = touch.clientY
+                  dragRef.current = {
+                    mode: 'move',
+                    blockId: block.id,
+                    startY: touch.clientY,
+                    origStartMin: timeToMin(block.startTime),
+                    origEndMin: timeToMin(block.endTime),
+                  }
+                }}
                 onClick={e => e.stopPropagation()}
               >
                 <div className="tl-block-label">{block.label}</div>
@@ -227,6 +249,19 @@ export default function ScheduleTimeline({ date }: { date: string }) {
                 <div
                   className="tl-resize-handle"
                   onMouseDown={e => { e.stopPropagation(); onBlockMouseDown(e, block, 'resize') }}
+                  onTouchStart={e => {
+                    e.stopPropagation()
+                    const touch = e.touches[0]
+                    mouseDownY.current = touch.clientY
+                    lastTouchY.current = touch.clientY
+                    dragRef.current = {
+                      mode: 'resize',
+                      blockId: block.id,
+                      startY: touch.clientY,
+                      origStartMin: timeToMin(block.startTime),
+                      origEndMin: timeToMin(block.endTime),
+                    }
+                  }}
                 />
               </div>
             ))}
