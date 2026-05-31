@@ -18,49 +18,34 @@ const CATEGORIES: Category[] = [
     color: '#a855f7',
     goals: [
       {
-        id: 'body',
-        label: 'Body — build + lean out',
-        sub: '50+ gym sessions tracked · visible muscle definition · run 2 miles non-stop by Aug 17',
+        id: 'fitness',
+        label: 'Complete 50+ gym sessions',
+        sub: 'Strength training + cardio tracked daily · visible progress by end of summer',
       },
       {
         id: 'pushups',
-        label: '50 push-ups — daily',
-        sub: 'Hit 50 push-ups every single day · track in the daily rings · builds to the goal progressively',
+        label: '50 push-ups — every day',
+        sub: 'Hit 50 push-ups daily · tracked in the daily metrics · builds progressively',
       },
       {
         id: 'diet',
-        label: 'Diet — zero sugar, zero junk',
-        sub: 'No candy, soda, chips, fast food, desserts · 120g+ protein daily · meal prep Sundays',
-      },
-      {
-        id: 'skin',
-        label: 'Skin + appearance glow-up',
-        sub: 'AM/PM skincare every day · cold shower every morning · Day 1 vs Day 70 comparison photo',
+        label: 'Clean diet — no sugar/junk',
+        sub: 'No processed food, candy, or fast food · 120g+ protein daily · consistent',
       },
       {
         id: 'reading',
         label: 'Read 2 full books',
-        sub: 'Atomic Habits by Week 4 · How to Win Friends & Influence People by Week 8 · no summaries',
+        sub: 'One book per month · no summaries · full read-throughs only',
       },
       {
         id: 'journal',
         label: '70-entry journal streak',
-        sub: '4 Monk Mode check-ins nightly · Sunday longer reflection every week · no gaps',
-      },
-      {
-        id: 'spirit',
-        label: 'Spirit — prayer + Bhagavad Gita',
-        sub: '10–15 min intentional prayer every morning · read all 18 chapters of Bhagavad Gita',
-      },
-      {
-        id: 'voice',
-        label: 'Voice — 10 speaking videos',
-        sub: '2-minute on-camera recording once per week · watch them back · Week 10 vs Week 1 visible growth',
+        sub: 'Daily evening check-in · Sunday longer reflection · no gaps allowed',
       },
       {
         id: 'meditation',
         label: 'Meditation — 70 sessions',
-        sub: '10 min every morning after prayer · Waking Up app or silent breathwork · trains deep focus',
+        sub: '10 min every morning · breathwork or guided · builds focus and clarity',
       },
     ],
   },
@@ -69,19 +54,19 @@ const CATEGORIES: Category[] = [
     color: '#3b82f6',
     goals: [
       {
-        id: 'calc',
+        id: 'course1',
         label: 'AP Calc AB — complete + pass',
-        sub: 'Units 1–8 Khan Academy · proficient on every unit test · Course Challenge by Aug 17',
+        sub: 'Units 1–8 · proficient on every unit · Course Challenge by end of summer',
       },
       {
-        id: 'physics',
+        id: 'course2',
         label: 'AP Physics 1 — complete + pass',
-        sub: 'Units 1–8 Khan Academy · proficient on every unit test · Course Challenge by Aug 17',
+        sub: 'Units 1–8 · proficient on every unit · Course Challenge by end of summer',
       },
       {
-        id: 'spanish',
-        label: 'Spanish — conversational fluency',
-        sub: 'All Spanish 2 grammar + vocab · hold a full conversation · become fluent',
+        id: 'course3',
+        label: 'Language — conversational fluency',
+        sub: 'Grammar + vocabulary · hold a full conversation by Week 10',
       },
     ],
   },
@@ -90,19 +75,19 @@ const CATEGORIES: Category[] = [
     color: '#22c55e',
     goals: [
       {
-        id: 'app',
-        label: 'Ship AI Teacher MVP v1',
-        sub: 'Voice + avatar interface · one subject · built for underserved communities · deployed by Aug 14',
+        id: 'project',
+        label: 'Ship main project — MVP v1',
+        sub: 'Core feature complete · deployed and accessible · presented by end of summer',
       },
       {
-        id: 'modernai',
-        label: 'Finish Modern AI Course',
-        sub: 'All lectures + homeworks complete · applied to the project build',
+        id: 'course4',
+        label: 'Finish primary online course',
+        sub: 'All lectures + assignments complete · applied directly to project build',
       },
       {
-        id: 'agents',
-        label: 'Finish AI Agents Course',
-        sub: 'Complete curriculum · agent skills feeding directly into AI Teacher architecture',
+        id: 'course5',
+        label: 'Finish secondary online course',
+        sub: 'Complete curriculum · skills feeding directly into project architecture',
       },
     ],
   },
@@ -127,7 +112,7 @@ export default function EndGoals() {
   return (
     <div className="card">
       <div className="card-title">End Goals</div>
-      <div className="card-sub">{doneCount}/{totalGoals} achieved · Aug 17, 2026 deadline</div>
+      <div className="card-sub">{doneCount}/{totalGoals} achieved · end-of-summer deadline</div>
 
       {CATEGORIES.map(cat => (
         <div key={cat.label} className="eg-category">
