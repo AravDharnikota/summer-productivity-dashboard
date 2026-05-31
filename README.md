@@ -2,7 +2,7 @@
 
 A personal productivity dashboard built for an intensive 77-day summer self-improvement program. Tracks daily habits, schedule, fitness, academics, and weekly reflections — all in one place.
 
-Built with **React 18 + TypeScript + Vite**, plain CSS, and localStorage persistence. No backend, no database.
+Built with **React 18 + TypeScript + Vite**, plain CSS, and localStorage persistence. No backend, no database. AI was used in this project.
 
 ![Dashboard preview](https://img.shields.io/badge/stack-React%20%2B%20TypeScript%20%2B%20Vite-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
