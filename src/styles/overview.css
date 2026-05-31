@@ -301,3 +301,20 @@
 
 .heatmap-grid { display: grid; grid-template-columns: repeat(28, 1fr); gap: 3px; }
 .heatmap-cell { height: 14px; border-radius: 3px; }
+
+/* ── Mobile reflow ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .rings-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ring-wrap { flex-shrink: 0; }
+
+  .unit-cols {
+    grid-template-columns: 1fr;
+  }
+  .unit-divider { display: none; }
+}

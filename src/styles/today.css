@@ -314,3 +314,13 @@ select.tl-edit-input { cursor: pointer; }
   transition: background 0.1s;
 }
 .tl-edit-save:hover { background: #0a200a; }
+
+/* ── Mobile reflow ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .dr-row {
+    overflow-x: auto;
+    grid-template-columns: repeat(5, 110px);
+    -webkit-overflow-scrolling: touch;
+  }
+  .tl-grid { touch-action: none; }
+}

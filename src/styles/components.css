@@ -96,3 +96,13 @@
 .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .gap-bottom { margin-bottom: 16px; }
 .stack { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── Mobile reflow ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .two-col, .two-col-wide {
+    grid-template-columns: 1fr;
+  }
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
