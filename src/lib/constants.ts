@@ -1,7 +1,7 @@
 import type { Habit, Hackathon } from '../types'
 
-export const START_DATE = '2026-05-30'
-export const END_DATE = '2026-08-14'
+export const START_DATE = '2026-05-31'
+export const END_DATE = '2026-08-15'
 export const TOTAL_DAYS = 77
 
 export const OFF_DAYS = [

@@ -42,7 +42,7 @@ export default function Topbar({ onMenuClick }: Props) {
         {hackathon && <div className="hack-badge">🚀 {hackathon}</div>}
         {off && !hackathon && <div className="off-badge">🌅 Off Day</div>}
         {!off && !hackathon && dayNum && <div className="monk-badge">⚡ Monk Mode</div>}
-        {!dayNum && !hackathon && <div className="day-chip">🔒 Lock-In starts May 30</div>}
+        {!dayNum && !hackathon && <div className="day-chip">🔒 Lock-In starts May 31</div>}
       </div>
     </div>
   )
