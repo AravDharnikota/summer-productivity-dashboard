@@ -83,18 +83,23 @@ export default function ScheduleTimeline({ date }: { date: string }) {
     hours.push({ label, top: (h * 60 - DAY_START) * PX_PER_MIN })
   }
 
+  function initiateDrag(clientY: number, block: ScheduleBlock, mode: 'move' | 'resize') {
+    mouseDownY.current = clientY
+    lastTouchY.current = clientY
+    dragRef.current = {
+      mode,
+      blockId: block.id,
+      startY: clientY,
+      origStartMin: timeToMin(block.startTime),
+      origEndMin: timeToMin(block.endTime),
+    }
+  }
+
   function onBlockMouseDown(e: React.MouseEvent, block: ScheduleBlock, mode: 'move' | 'resize') {
     if (e.button !== 0) return
     e.stopPropagation()
     e.preventDefault()
-    mouseDownY.current = e.clientY
-    dragRef.current = {
-      mode,
-      blockId: block.id,
-      startY: e.clientY,
-      origStartMin: timeToMin(block.startTime),
-      origEndMin: timeToMin(block.endTime),
-    }
+    initiateDrag(e.clientY, block, mode)
   }
 
   function onMouseMove(e: React.MouseEvent) {
@@ -196,6 +201,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseUp}
           onTouchMove={e => {
+            e.preventDefault()
             const touch = e.touches[0]
             lastTouchY.current = touch.clientY
             onMouseMove({ clientY: touch.clientY } as React.MouseEvent)
@@ -226,17 +232,9 @@ export default function ScheduleTimeline({ date }: { date: string }) {
                 }}
                 onMouseDown={e => onBlockMouseDown(e, block, 'move')}
                 onTouchStart={e => {
+                  e.preventDefault()
                   e.stopPropagation()
-                  const touch = e.touches[0]
-                  mouseDownY.current = touch.clientY
-                  lastTouchY.current = touch.clientY
-                  dragRef.current = {
-                    mode: 'move',
-                    blockId: block.id,
-                    startY: touch.clientY,
-                    origStartMin: timeToMin(block.startTime),
-                    origEndMin: timeToMin(block.endTime),
-                  }
+                  initiateDrag(e.touches[0].clientY, block, 'move')
                 }}
                 onClick={e => e.stopPropagation()}
               >
@@ -250,17 +248,9 @@ export default function ScheduleTimeline({ date }: { date: string }) {
                   className="tl-resize-handle"
                   onMouseDown={e => { e.stopPropagation(); onBlockMouseDown(e, block, 'resize') }}
                   onTouchStart={e => {
+                    e.preventDefault()
                     e.stopPropagation()
-                    const touch = e.touches[0]
-                    mouseDownY.current = touch.clientY
-                    lastTouchY.current = touch.clientY
-                    dragRef.current = {
-                      mode: 'resize',
-                      blockId: block.id,
-                      startY: touch.clientY,
-                      origStartMin: timeToMin(block.startTime),
-                      origEndMin: timeToMin(block.endTime),
-                    }
+                    initiateDrag(e.touches[0].clientY, block, 'resize')
                   }}
                 />
               </div>
