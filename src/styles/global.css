@@ -1,27 +1,40 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:           #0a0a0a;
-  --bg-sidebar:   #0d0d0d;
-  --bg-card:      #111111;
-  --bg-hover:     #161616;
-  --border:       #1f1f1f;
-  --border-light: #1a1a1a;
-  --text:         #e8e8e8;
+  --bg:           #080808;
+  --bg-sidebar:   #080808;
+  --bg-card:      #0f0f0f;
+  --bg-elevated:  #141414;
+  --bg-hover:     #141414;
+  --border:       #1c1c1c;
+  --border-light: #1c1c1c;
+  --border-hover: #2a2a2a;
+  --text:         #ffffff;
+  --text-body:    #a1a1a1;
   --text-muted:   #555555;
-  --text-dim:     #3f3f3f;
-  --green:        #22c55e;
-  --green-bg:     #0f1f0f;
+  --text-dim:     #333333;
+  --green:        #16a34a;
+  --green-bright: #22c55e;
+  --green-bg:     #052e16;
   --green-border: #166534;
-  --green-dim:    #0c1a0c;
-  --blue:         #3b82f6;
-  --blue-bg:      #0f172a;
-  --orange:       #fb923c;
-  --orange-bg:    #1c1000;
-  --purple:       #a855f7;
-  --teal:         #14b8a6;
-  --red:          #ef4444;
+  --green-dim:    #0a1a0e;
+  --blue:         #1d4ed8;
+  --blue-bright:  #3b82f6;
+  --blue-bg:      #0a0f1e;
+  --blue-border:  #1e3a8a;
+  --orange:       #d97706;
+  --orange-bright:#fb923c;
+  --orange-bg:    #1c0a00;
+  --purple:       #7c3aed;
+  --purple-bright:#a855f7;
+  --purple-bg:    #0f0a1e;
+  --teal:         #0f766e;
+  --teal-bright:  #14b8a6;
+  --red:          #dc2626;
+  --red-bright:   #ef4444;
   --red-bg:       #160a0a;
+  --red-border:   #7f1d1d;
+  --amber:        #d97706;
   --indigo:       #818cf8;
   --indigo-bg:    #0d0d2a;
   --indigo-border:#3b4fd8;
@@ -30,14 +43,14 @@
 html, body, #root {
   height: 100%;
   background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, 'Inter', system-ui, sans-serif;
+  color: var(--text-body);
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
   font-size: 14px;
   line-height: 1.5;
 }
 
 button { cursor: pointer; border: none; background: none; font: inherit; }
-input, textarea { font: inherit; }
+input, textarea, select { font: inherit; }
 a { color: inherit; text-decoration: none; }
 
 /* ── Lock Screen ─────────────────────────────────────── */
@@ -50,31 +63,31 @@ a { color: inherit; text-decoration: none; }
   gap: 12px; width: 320px;
 }
 .lock-logo {
-  width: 48px; height: 48px; border-radius: 12px;
+  width: 44px; height: 44px; border-radius: 8px;
   background: var(--green-bg); border: 1px solid var(--green-border);
-  color: var(--green); font-size: 22px; font-weight: 800;
+  color: var(--green-bright); font-size: 20px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 4px;
 }
 .lock-title {
-  font-size: 20px; font-weight: 700; color: var(--text);
+  font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.03em;
 }
 .lock-sub {
-  font-size: 13px; color: var(--text-muted); margin-bottom: 8px;
+  font-size: 12px; color: var(--text-muted); margin-bottom: 8px;
 }
 .lock-input {
-  width: 100%; padding: 11px 14px; border-radius: 9px;
+  width: 100%; padding: 10px 13px; border-radius: 6px;
   background: var(--bg-card); border: 1px solid var(--border);
   color: var(--text); font-size: 14px; outline: none;
   transition: border-color 0.15s; font-family: inherit;
 }
-.lock-input:focus { border-color: #2a2a2a; }
+.lock-input:focus { border-color: var(--border-hover); }
 .lock-input-error { border-color: var(--red) !important; }
 .lock-error { font-size: 12px; color: var(--red); align-self: flex-start; }
 .lock-btn {
-  width: 100%; padding: 11px; border-radius: 9px; cursor: pointer;
+  width: 100%; padding: 10px; border-radius: 6px; cursor: pointer;
   background: var(--green-bg); border: 1px solid var(--green-border);
-  color: var(--green); font-size: 13px; font-weight: 700;
+  color: var(--green-bright); font-size: 13px; font-weight: 600;
   transition: background 0.1s; font-family: inherit;
 }
-.lock-btn:hover { background: #0a200a; }
+.lock-btn:hover { background: #062818; }

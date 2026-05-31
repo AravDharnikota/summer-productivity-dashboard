@@ -10,11 +10,19 @@ const SNAP = 15
 const DRAG_THRESHOLD = 5
 
 const TYPE_COLORS: Record<BlockType, string> = {
-  build:   '#f97316',
-  study:   '#3b82f6',
-  gym:     '#22c55e',
-  routine: '#6b7280',
-  break:   '#8b5cf6',
+  build:   '#16a34a',
+  study:   '#1d4ed8',
+  gym:     '#16a34a',
+  routine: '#404040',
+  break:   '#7c3aed',
+}
+
+const TYPE_BG: Record<BlockType, string> = {
+  build:   '#0a1a0e',
+  study:   '#0a0f1e',
+  gym:     '#0a1a0e',
+  routine: 'transparent',
+  break:   '#0f0a1e',
 }
 
 interface EditState {
@@ -228,7 +236,7 @@ export default function ScheduleTimeline({ date }: { date: string }) {
                   top: blockTop(block),
                   height: blockHeight(block),
                   borderLeft: `3px solid ${TYPE_COLORS[block.type]}`,
-                  background: `${TYPE_COLORS[block.type]}22`,
+                  background: TYPE_BG[block.type],
                 }}
                 onMouseDown={e => onBlockMouseDown(e, block, 'move')}
                 onTouchStart={e => {

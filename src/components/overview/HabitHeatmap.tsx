@@ -6,10 +6,10 @@ import { START_DATE, END_DATE, HABITS } from '../../lib/constants'
 const ALL_DAYS = getDatesInRange(START_DATE, END_DATE) // 77 dates
 
 function cellStyle(done: boolean | undefined, isFuture: boolean): React.CSSProperties {
-  if (isFuture)        return { background: 'transparent', border: '1px solid #2a2a2a' }
-  if (done === true)   return { background: '#22c55e', border: '1px solid #16a34a' }
-  if (done === false)  return { background: '#7f1d1d', border: '1px solid #991b1b' }
-  return { background: 'transparent', border: '1px solid #3a3a3a' } // past, no log
+  if (isFuture)       return { background: '#0f0f0f', border: '1px dashed #1c1c1c' }
+  if (done === true)  return { background: '#16a34a' }
+  if (done === false) return { background: '#7f1d1d' }
+  return { background: '#1a1a1a' }
 }
 
 export default function HabitHeatmap() {
@@ -59,10 +59,10 @@ export default function HabitHeatmap() {
       </div>
 
       <div className="hm-legend">
-        <span><span className="hm-swatch" style={{ background: '#22c55e', border: '1px solid #16a34a' }} /> Done</span>
-        <span><span className="hm-swatch" style={{ background: '#7f1d1d', border: '1px solid #991b1b' }} /> Missed</span>
-        <span><span className="hm-swatch" style={{ background: 'transparent', border: '1px solid #3a3a3a' }} /> Not logged</span>
-        <span><span className="hm-swatch" style={{ background: 'transparent', border: '1px solid #2a2a2a' }} /> Future</span>
+        <span><span className="hm-swatch" style={{ background: '#16a34a' }} /> Done</span>
+        <span><span className="hm-swatch" style={{ background: '#7f1d1d' }} /> Missed</span>
+        <span><span className="hm-swatch" style={{ background: '#1a1a1a' }} /> Not logged</span>
+        <span><span className="hm-swatch" style={{ background: '#0f0f0f', border: '1px dashed #1c1c1c' }} /> Future</span>
       </div>
     </div>
   )
